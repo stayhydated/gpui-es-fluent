@@ -10,8 +10,8 @@ repository.workspace = true
 readme = "README.md"
 
 [features]
-default = []
 component = [ "dep:gpui-component" ]
+default = [  ]
 
 [dependencies]
 es-fluent = { workspace = true }

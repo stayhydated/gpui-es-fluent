@@ -7,10 +7,12 @@ Use it to decide:
 
 1. which surface owns a change,
 2. whether the change affects the public crate API,
-3. which README and feature-gate guidance must change together,
+3. which rustdoc, README, and feature-gate guidance must change together,
 4. which narrow validation command should run before handoff.
 
 Start in `crates/gpui-es-fluent/src/lib.rs` for API and behavior changes.
+Its crate-level rustdoc includes `crates/gpui-es-fluent/README.md`, and its
+item-level rustdocs describe the public helper API.
 Start in the root `Cargo.toml` for workspace metadata, shared dependencies,
 lint policy, and `replace` rules.
 
@@ -51,22 +53,29 @@ Before editing, classify the change:
 
 ## Documentation Placement
 
-Treat the root `README.md` and `crates/gpui-es-fluent/README.md` as
-user-facing. Keep them concise and example-first when adding usage guidance.
+Treat the root `README.md`, `crates/gpui-es-fluent/README.md`, and public
+rustdocs in `crates/gpui-es-fluent/src/lib.rs` as user-facing. Keep them
+concise and example-first when adding usage guidance.
 
-This workspace does not currently have examples, public skills, CI workflows,
-`justfile` recipes, or architecture docs. Do not add sync rules for those
-surfaces unless the surfaces are added in the same change.
+The root `README.md` is the workspace overview. The crate README is the
+canonical usage guide for the public crate and is included as the crate-level
+rustdoc. Keep item-level rustdocs beside the public items they describe.
+
+This workspace does not currently have examples, book docs, public skills, CI
+workflows, `justfile` recipes, or `ARCHITECTURE.md` files. Do not add sync rules
+for those surfaces unless the surfaces are added in the same change. If a book,
+public skill, or example surface is added later, name its exact path and update
+trigger here; put reusable application guidance in the owning surface itself.
 
 ## Synchronization Rules
 
 - When public helper behavior, public function names, fallback rendering,
   locale-selection behavior, or supported language bounds change, update
-  `crates/gpui-es-fluent/src/lib.rs` and the affected README usage text in the
-  same change.
+  `crates/gpui-es-fluent/src/lib.rs`, item-level rustdocs, and the affected
+  README usage text in the same change.
 - When `gpui-component` locale integration changes, keep the `component`
   feature in `crates/gpui-es-fluent/Cargo.toml` aligned with every
-  `#[cfg(feature = "component")]` item in `src/lib.rs`.
+  `#[cfg(feature = "component")]` item and related docs in `src/lib.rs`.
 - When shared dependency versions, workspace metadata, lint policy, or
   `replace` rules change, update the root `Cargo.toml` first and keep the member
   crate on `workspace = true` for workspace-managed dependencies.
@@ -92,6 +101,8 @@ surfaces unless the surfaces are added in the same change.
   changes.
 - Use `cargo check -p gpui-es-fluent --all-features` for `component`, dependency,
   workspace metadata, or feature-gate changes.
+- Use `cargo doc -p gpui-es-fluent --all-features --no-deps` for rustdoc or
+  crate README changes.
 - Use `cargo test -p gpui-es-fluent --all-features` when behavior changes are
   covered by tests.
 - If validation cannot be run, state why and what remains unvalidated.
