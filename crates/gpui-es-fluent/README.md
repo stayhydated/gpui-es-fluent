@@ -93,7 +93,7 @@ Call `init`, `init_with_language`, or `replace_with_language` before calling
 With the `component` feature enabled:
 
 - `component_language(fallback)` reads `gpui_component::locale()` and falls back
-  to `fallback` when the component locale is invalid.
+  to a typed `LanguageIdentifier` when the component locale is invalid.
 - `init_from_component_locale(cx, fallback)` initializes `I18n` from the current
   `gpui-component` locale.
 - `set_component_locale(cx, locale, fallback)` sets the `gpui-component` locale,
@@ -101,4 +101,9 @@ With the `component` feature enabled:
 - `sync_component_locale(cx, fallback)` reads the current component locale and
   applies it to the installed `I18n` global when one exists.
 
-The fallback string passed to these helpers must be a valid language identifier.
+Parse fallback strings once at the caller boundary:
+
+```rust,ignore
+let fallback = "en-US".parse::<unic_langid::LanguageIdentifier>()?;
+let language = gpui_es_fluent::component_language(fallback);
+```

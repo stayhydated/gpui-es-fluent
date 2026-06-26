@@ -234,18 +234,21 @@ pub fn humanize_key(id: &str) -> String {
 #[cfg(feature = "component")]
 /// Reads the current `gpui-component` locale as a language identifier.
 ///
-/// If the component locale is invalid, `fallback` is parsed instead. The
-/// fallback string must be a valid language identifier.
-pub fn component_language(fallback: &str) -> LanguageIdentifier {
+/// If the component locale is invalid, the already-parsed `fallback` language
+/// is returned instead.
+pub fn component_language(fallback: impl Into<LanguageIdentifier>) -> LanguageIdentifier {
+    let fallback = fallback.into();
     gpui_component::locale()
         .parse::<LanguageIdentifier>()
-        .or_else(|_| fallback.parse::<LanguageIdentifier>())
-        .expect("fallback language must be a valid language identifier")
+        .unwrap_or(fallback)
 }
 
 #[cfg(feature = "component")]
 /// Initializes [`I18n`] from the current `gpui-component` locale.
-pub fn init_from_component_locale(cx: &mut App, fallback: &str) -> Result<(), EmbeddedInitError> {
+pub fn init_from_component_locale(
+    cx: &mut App,
+    fallback: impl Into<LanguageIdentifier>,
+) -> Result<(), EmbeddedInitError> {
     init_with_language(cx, component_language(fallback))
 }
 
@@ -257,16 +260,12 @@ pub fn init_from_component_locale(cx: &mut App, fallback: &str) -> Result<(), Em
 pub fn set_component_locale(
     cx: &mut App,
     locale: impl AsRef<str>,
-    fallback: &str,
+    fallback: impl Into<LanguageIdentifier>,
 ) -> Result<LanguageIdentifier, EmbeddedInitError> {
     let language = locale
         .as_ref()
         .parse::<LanguageIdentifier>()
-        .unwrap_or_else(|_| {
-            fallback
-                .parse()
-                .expect("fallback language must be a valid language identifier")
-        });
+        .unwrap_or_else(|_| fallback.into());
 
     gpui_component::set_locale(&language.to_string());
     replace_with_language(cx, language.clone())?;
@@ -277,10 +276,40 @@ pub fn set_component_locale(
 /// Syncs the installed [`I18n`] global from the current `gpui-component` locale.
 ///
 /// The parsed language is returned even when no [`I18n`] global is installed.
-pub fn sync_component_locale(cx: &impl Borrow<App>, fallback: &str) -> LanguageIdentifier {
+pub fn sync_component_locale(
+    cx: &impl Borrow<App>,
+    fallback: impl Into<LanguageIdentifier>,
+) -> LanguageIdentifier {
     let language = component_language(fallback);
     if let Some(i18n) = cx.borrow().try_global::<I18n>() {
         let _ = i18n.select_language(language.clone());
     }
     language
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn humanize_key_strips_label_suffix_and_title_cases_segments() {
+        assert_eq!(
+            humanize_key("sales-order_status_label"),
+            "Sales Order Status"
+        );
+        assert_eq!(humanize_key("__line-item__"), "Line Item");
+    }
+}
+
+#[cfg(all(test, feature = "component"))]
+mod component_tests {
+    use super::*;
+
+    #[test]
+    fn component_language_uses_typed_fallback_for_invalid_component_locale() {
+        gpui_component::set_locale("not a locale");
+        let fallback = "en-US".parse::<LanguageIdentifier>().unwrap();
+
+        assert_eq!(component_language(fallback.clone()), fallback);
+    }
 }
