@@ -187,7 +187,7 @@ pub fn fallback_label<T>() -> String
 where
     T: FluentLabel,
 {
-    T::localize_label(&FallbackLocalizer)
+    es_fluent::fallback_label::<T>()
 }
 
 /// Localizer that renders message and label IDs as readable fallback text.
@@ -199,7 +199,7 @@ impl FluentLocalizer for FallbackLocalizer {
         id: StaticFluentEntryId,
         _args: Option<&FluentArgs<'a>>,
     ) -> Option<String> {
-        Some(humanize_key(id.as_ref()))
+        Some(es_fluent::humanize_fluent_entry_id(id))
     }
 
     fn localize_in_domain<'a>(
@@ -208,7 +208,7 @@ impl FluentLocalizer for FallbackLocalizer {
         id: StaticFluentEntryId,
         _args: Option<&FluentArgs<'a>>,
     ) -> Option<String> {
-        Some(humanize_key(id.as_ref()))
+        Some(es_fluent::humanize_fluent_entry_id(id))
     }
 }
 
