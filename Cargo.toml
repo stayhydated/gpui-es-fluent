@@ -1,26 +1,29 @@
-[workspace]
-members = [ "crates/gpui-es-fluent" ]
-resolver = "3"
-
-[workspace.package]
+[package]
+name = "gpui-es-fluent"
+description = "GPUI global-state integration helpers for es-fluent"
+version = "0.1.0"
+rust-version = "1.96"
 edition = "2024"
 license = "MIT OR Apache-2.0"
 publish = true
-readme = "README.md"
 repository = "https://github.com/stayhydated/gpui-es-fluent"
-rust-version = "1.96"
-version = "0.1.0"
+readme = "README.md"
 
-[workspace.dependencies]
-es-fluent = { path = "../es-fluent/crates/es-fluent", version = "0.16" }
-es-fluent-manager-embedded = { path = "../es-fluent/crates/es-fluent-manager-embedded", version = "0.16" }
-gpui = { git = "https://github.com/zed-industries/zed", rev = "b077f41a9f26ae5ed7fadfea55a501d34afb25de" }
-gpui-component = { git = "https://github.com/longbridge/gpui-component" }
+[features]
+component = [ "dep:gpui-component" ]
+default = [  ]
+
+[dependencies]
+es-fluent = "0.18"
+es-fluent-manager-embedded = "0.18"
+gpui = { git = "https://github.com/zed-industries/zed", rev = "c545fb67d0ce13e335bff76f7c08986000333f2c" }
+gpui-component = { git = "https://github.com/longbridge/gpui-component", optional = true }
 strum = "0.28"
-unic-langid = "0.9"
+unic-langid = { features = [ "serde" ], version = "0.9" }
 
 [replace]
-"https://github.com/zed-industries/zed#gpui@0.2.2" = { git = "https://github.com/zed-industries/zed", rev = "b077f41a9f26ae5ed7fadfea55a501d34afb25de" }
+"https://github.com/zed-industries/zed#gpui@0.2.2" = { git = "https://github.com/zed-industries/zed", rev = "c545fb67d0ce13e335bff76f7c08986000333f2c" }
+"https://github.com/zed-industries/zed#gpui_macros@0.1.0" = { git = "https://github.com/zed-industries/zed", rev = "c545fb67d0ce13e335bff76f7c08986000333f2c" }
 
 [profile.dev]
 codegen-units = 16
@@ -33,13 +36,22 @@ opt-level = 3
 
 [profile.release]
 codegen-units = 1
-lto = true
+lto = "thin"
 opt-level = 3
 
-[workspace.lints.rust]
-unexpected_cfgs = { level = "deny" }
+[lints.rust]
+future_incompatible = "deny"
+nonstandard_style = "deny"
+unexpected_cfgs = { check-cfg = [ "cfg(coverage)" ], level = "deny" }
+unsafe_op_in_unsafe_fn = "deny"
+unused_must_use = "deny"
 
-[workspace.lints.clippy]
+[lints.rustdoc]
+bare_urls = "deny"
+broken_intra_doc_links = "deny"
+
+[lints.clippy]
+all = { level = "warn", priority = -1 }
 dbg_macro = "deny"
 derive_partial_eq_without_eq = "warn"
 err_expect = "warn"

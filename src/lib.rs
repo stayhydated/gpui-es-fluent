@@ -19,6 +19,11 @@ pub struct I18n {
 
 impl I18n {
     /// Creates a localization manager using the embedded default language.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`EmbeddedInitError`] when the embedded localization manager
+    /// cannot be initialized.
     pub fn new() -> Result<Self, EmbeddedInitError> {
         Ok(Self {
             manager: EmbeddedI18n::try_new()?,
@@ -26,6 +31,11 @@ impl I18n {
     }
 
     /// Creates a localization manager initialized with the requested language.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`EmbeddedInitError`] when the embedded localization manager
+    /// cannot be initialized for `language`.
     pub fn new_with_language(
         language: impl Into<LanguageIdentifier>,
     ) -> Result<Self, EmbeddedInitError> {
@@ -40,6 +50,10 @@ impl I18n {
     }
 
     /// Selects the active language on the underlying manager.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`LocalizationError`] when the manager cannot select `language`.
     pub fn select_language(
         &self,
         language: impl Into<LanguageIdentifier>,
@@ -104,6 +118,11 @@ pub struct CurrentLanguage<L: Language>(pub L);
 impl<L: Language> gpui::Global for CurrentLanguage<L> {}
 
 /// Installs an [`I18n`] global if one is not already present.
+///
+/// # Errors
+///
+/// Returns [`EmbeddedInitError`] when no [`I18n`] global exists and the embedded
+/// localization manager cannot be initialized.
 pub fn init(cx: &mut App) -> Result<(), EmbeddedInitError> {
     if cx.try_global::<I18n>().is_none() {
         cx.set_global(I18n::new()?);
@@ -112,6 +131,11 @@ pub fn init(cx: &mut App) -> Result<(), EmbeddedInitError> {
 }
 
 /// Installs an [`I18n`] global for `language` if one is not already present.
+///
+/// # Errors
+///
+/// Returns [`EmbeddedInitError`] when no [`I18n`] global exists and the embedded
+/// localization manager cannot be initialized for `language`.
 pub fn init_with_language(
     cx: &mut App,
     language: impl Into<LanguageIdentifier>,
@@ -123,6 +147,11 @@ pub fn init_with_language(
 }
 
 /// Replaces any existing [`I18n`] global with one initialized for `language`.
+///
+/// # Errors
+///
+/// Returns [`EmbeddedInitError`] when the embedded localization manager cannot
+/// be initialized for `language`.
 pub fn replace_with_language(
     cx: &mut App,
     language: impl Into<LanguageIdentifier>,
@@ -135,6 +164,15 @@ pub fn replace_with_language(
 ///
 /// This expects [`init`], [`init_with_language`], or [`replace_with_language`] to
 /// have installed the global first.
+///
+/// # Errors
+///
+/// Returns [`LocalizationError`] when the installed manager cannot select
+/// `language`.
+///
+/// # Panics
+///
+/// Panics when no [`I18n`] global has been installed.
 pub fn change_locale(
     cx: &mut App,
     language: impl Into<LanguageIdentifier>,
@@ -218,17 +256,22 @@ impl FluentLocalizer for FallbackLocalizer {
 /// segments, and uppercases the first character of each remaining segment.
 pub fn humanize_key(id: &str) -> String {
     let id = id.strip_suffix("_label").unwrap_or(id);
-    id.split(['_', '-'])
-        .filter(|part| !part.is_empty())
-        .map(|part| {
-            let mut chars = part.chars();
-            match chars.next() {
-                Some(first) => first.to_uppercase().chain(chars).collect::<String>(),
-                None => String::new(),
-            }
-        })
-        .collect::<Vec<_>>()
-        .join(" ")
+    let mut output = String::with_capacity(id.len());
+
+    for part in id.split(['_', '-']).filter(|part| !part.is_empty()) {
+        if !output.is_empty() {
+            output.push(' ');
+        }
+
+        let Some(first) = part.chars().next() else {
+            continue;
+        };
+
+        output.extend(first.to_uppercase());
+        output.push_str(&part[first.len_utf8()..]);
+    }
+
+    output
 }
 
 #[cfg(feature = "component")]
@@ -245,6 +288,11 @@ pub fn component_language(fallback: impl Into<LanguageIdentifier>) -> LanguageId
 
 #[cfg(feature = "component")]
 /// Initializes [`I18n`] from the current `gpui-component` locale.
+///
+/// # Errors
+///
+/// Returns [`EmbeddedInitError`] when no [`I18n`] global exists and the embedded
+/// localization manager cannot be initialized for the component locale.
 pub fn init_from_component_locale(
     cx: &mut App,
     fallback: impl Into<LanguageIdentifier>,
@@ -257,6 +305,11 @@ pub fn init_from_component_locale(
 ///
 /// Invalid `locale` values fall back to `fallback`, which must be a valid
 /// language identifier. The selected language is returned.
+///
+/// # Errors
+///
+/// Returns [`EmbeddedInitError`] when the embedded localization manager cannot
+/// be initialized for the selected language.
 pub fn set_component_locale(
     cx: &mut App,
     locale: impl AsRef<str>,
@@ -276,15 +329,20 @@ pub fn set_component_locale(
 /// Syncs the installed [`I18n`] global from the current `gpui-component` locale.
 ///
 /// The parsed language is returned even when no [`I18n`] global is installed.
+///
+/// # Errors
+///
+/// Returns [`LocalizationError`] when an installed manager cannot select the
+/// parsed language.
 pub fn sync_component_locale(
     cx: &impl Borrow<App>,
     fallback: impl Into<LanguageIdentifier>,
-) -> LanguageIdentifier {
+) -> Result<LanguageIdentifier, LocalizationError> {
     let language = component_language(fallback);
     if let Some(i18n) = cx.borrow().try_global::<I18n>() {
-        let _ = i18n.select_language(language.clone());
+        i18n.select_language(language.clone())?;
     }
-    language
+    Ok(language)
 }
 
 #[cfg(test)]
