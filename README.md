@@ -1,5 +1,10 @@
 # gpui-es-fluent
 
+[![Build Status](https://github.com/stayhydated/gpui-es-fluent/actions/workflows/ci.yml/badge.svg)](https://github.com/stayhydated/gpui-es-fluent/actions/workflows/ci.yml)
+[![Codecov](https://codecov.io/github/stayhydated/gpui-es-fluent/graph/badge.svg)](https://codecov.io/github/stayhydated/gpui-es-fluent)
+[![Docs](https://docs.rs/gpui-es-fluent/badge.svg)](https://docs.rs/gpui-es-fluent/)
+[![Crates.io](https://img.shields.io/crates/v/gpui-es-fluent.svg)](https://crates.io/crates/gpui-es-fluent)
+
 Shared GPUI integration helpers for applications that embed `es-fluent`
 resources.
 
