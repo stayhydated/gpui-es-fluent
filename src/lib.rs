@@ -348,6 +348,129 @@ pub fn sync_component_locale(
 #[cfg(test)]
 mod tests {
     use super::*;
+    use es_fluent::registry::StaticFluentArgumentName;
+    use es_fluent_manager_embedded::__manager_core::{
+        FluentArgumentMap, I18nModule, I18nModuleDescriptor, I18nModuleRegistration, Localizer,
+        ModuleData,
+    };
+    use std::sync::{Mutex, Once};
+    use unic_langid::langid;
+
+    const TEST_DOMAIN: &str = "gpui-es-fluent-test";
+
+    static TEST_SUPPORTED_LANGUAGES: &[LanguageIdentifier] = &[langid!("en-US"), langid!("fr")];
+    static TEST_MODULE_DATA: ModuleData = ModuleData {
+        name: TEST_DOMAIN,
+        domain: es_fluent_manager_embedded::__manager_core::__macro::static_domain(TEST_DOMAIN),
+        supported_languages: TEST_SUPPORTED_LANGUAGES,
+        namespaces: &[],
+    };
+    static TEST_MODULE: TestModule = TestModule;
+    static INVENTORY_ONCE: Once = Once::new();
+
+    es_fluent_manager_embedded::__inventory::submit!(&TEST_MODULE as &dyn I18nModuleRegistration);
+
+    struct TestModule;
+
+    impl I18nModuleDescriptor for TestModule {
+        fn data(&self) -> &'static ModuleData {
+            &TEST_MODULE_DATA
+        }
+    }
+
+    impl I18nModule for TestModule {
+        fn create_localizer(&self) -> Box<dyn Localizer> {
+            Box::new(TestLocalizer {
+                selected: Mutex::new(langid!("en-US")),
+            })
+        }
+    }
+
+    struct TestLocalizer {
+        selected: Mutex<LanguageIdentifier>,
+    }
+
+    impl Localizer for TestLocalizer {
+        fn select_language(&self, lang: &LanguageIdentifier) -> Result<(), LocalizationError> {
+            if TEST_SUPPORTED_LANGUAGES
+                .iter()
+                .any(|candidate| candidate == lang)
+            {
+                *self.selected.lock().unwrap() = lang.clone();
+                Ok(())
+            } else {
+                Err(LocalizationError::LanguageNotSupported(lang.clone()))
+            }
+        }
+
+        fn localize<'a>(
+            &self,
+            id: StaticFluentEntryId,
+            _args: Option<&FluentArgumentMap<'a>>,
+        ) -> Option<String> {
+            let selected = self.selected.lock().unwrap().to_string();
+            let value = match (selected.as_str(), id.as_str()) {
+                ("en-US", "test_message") => "Hello from test",
+                ("en-US", "test_label") => "Test label",
+                ("fr", "test_message") => "Bonjour du test",
+                ("fr", "test_label") => "Etiquette de test",
+                _ => return None,
+            };
+
+            Some(value.to_string())
+        }
+    }
+
+    struct TestMessage;
+
+    impl FluentMessage for TestMessage {
+        fn to_fluent_string_with(
+            &self,
+            localize: &mut es_fluent::FluentMessageLookup<'_>,
+        ) -> String {
+            localize(
+                static_domain(TEST_DOMAIN),
+                static_entry("test_message"),
+                None,
+            )
+        }
+    }
+
+    struct TestLabel;
+
+    impl FluentLabel for TestLabel {
+        fn fluent_label_domain() -> StaticFluentDomain {
+            static_domain(TEST_DOMAIN)
+        }
+
+        fn fluent_label_id() -> StaticFluentEntryId {
+            static_entry("test_label")
+        }
+    }
+
+    fn force_inventory_link() {
+        INVENTORY_ONCE.call_once(|| {
+            let _ = &TEST_MODULE;
+        });
+    }
+
+    fn static_domain(value: &'static str) -> StaticFluentDomain {
+        StaticFluentDomain::try_new(value).unwrap()
+    }
+
+    fn static_entry(value: &'static str) -> StaticFluentEntryId {
+        StaticFluentEntryId::try_new(value).unwrap()
+    }
+
+    fn language(value: &str) -> LanguageIdentifier {
+        value.parse().unwrap()
+    }
+
+    fn with_test_app(test: impl FnOnce(&mut gpui::TestAppContext)) {
+        let mut cx = gpui::TestAppContext::single();
+        test(&mut cx);
+        cx.quit();
+    }
 
     #[test]
     fn humanize_key_strips_label_suffix_and_title_cases_segments() {
@@ -357,17 +480,228 @@ mod tests {
         );
         assert_eq!(humanize_key("__line-item__"), "Line Item");
     }
-}
-
-#[cfg(all(test, feature = "component"))]
-mod component_tests {
-    use super::*;
 
     #[test]
-    fn component_language_uses_typed_fallback_for_invalid_component_locale() {
-        gpui_component::set_locale("not a locale");
-        let fallback = "en-US".parse::<LanguageIdentifier>().unwrap();
+    fn fallback_helpers_render_readable_message_and_label_text() {
+        let localizer = FallbackLocalizer;
 
+        assert_eq!(fallback_message(&TestMessage), "Test Message");
+        assert_eq!(fallback_label::<TestLabel>(), "Test");
+        assert_eq!(
+            localizer.localize(static_entry("primary-action_label"), None),
+            Some("Primary Action".to_string())
+        );
+        assert_eq!(
+            localizer.localize_in_domain(
+                static_domain(TEST_DOMAIN),
+                static_entry("secondary_action"),
+                Some(&FluentArgs::new()),
+            ),
+            Some("Secondary Action".to_string())
+        );
+    }
+
+    #[test]
+    fn i18n_facade_delegates_to_embedded_manager() {
+        force_inventory_link();
+        let i18n = I18n::new_with_language(language("en-US")).unwrap();
+
+        assert_eq!(
+            i18n.manager().localize_message(&TestMessage),
+            "Hello from test"
+        );
+        assert_eq!(i18n.localize_message(&TestMessage), "Hello from test");
+        assert_eq!(i18n.localize_label::<TestLabel>(), "Test label");
+
+        i18n.select_language(language("fr")).unwrap();
+
+        assert_eq!(i18n.localize_message(&TestMessage), "Bonjour du test");
+        assert_eq!(i18n.localize_label::<TestLabel>(), "Etiquette de test");
+    }
+
+    #[test]
+    fn i18n_can_initialize_before_a_language_is_selected() {
+        force_inventory_link();
+        let i18n = I18n::new().unwrap();
+
+        assert_eq!(i18n.localize_message(&TestMessage), "test_message");
+        assert_eq!(i18n.localize_label::<TestLabel>(), "test_label");
+    }
+
+    #[test]
+    fn app_helpers_use_fallbacks_without_i18n_global() {
+        with_test_app(|cx| {
+            cx.update(|cx| {
+                assert_eq!(try_localize_message(&*cx, &TestMessage), None);
+                assert_eq!(localize_message(&*cx, &TestMessage), "Test Message");
+                assert_eq!(localize_label::<TestLabel>(&*cx), "Test");
+            })
+        });
+    }
+
+    #[test]
+    fn init_installs_i18n_once_and_change_locale_updates_it() {
+        force_inventory_link();
+
+        with_test_app(|cx| {
+            cx.update(|cx| {
+                init(cx).unwrap();
+                assert_eq!(
+                    try_localize_message(&*cx, &TestMessage),
+                    Some("test_message".to_string())
+                );
+
+                let initial = cx.global::<I18n>().manager() as *const EmbeddedI18n;
+                init(cx).unwrap();
+                assert_eq!(
+                    cx.global::<I18n>().manager() as *const EmbeddedI18n,
+                    initial
+                );
+
+                change_locale(cx, language("en-US")).unwrap();
+                assert_eq!(
+                    try_localize_message(&*cx, &TestMessage),
+                    Some("Hello from test".to_string())
+                );
+            })
+        });
+    }
+
+    #[test]
+    fn language_initialization_preserves_existing_global_until_replace() {
+        force_inventory_link();
+
+        with_test_app(|cx| {
+            cx.update(|cx| {
+                init_with_language(cx, language("en-US")).unwrap();
+                assert_eq!(localize_message(&*cx, &TestMessage), "Hello from test");
+
+                init_with_language(cx, language("fr")).unwrap();
+                assert_eq!(localize_message(&*cx, &TestMessage), "Hello from test");
+
+                replace_with_language(cx, language("fr")).unwrap();
+                assert_eq!(localize_message(&*cx, &TestMessage), "Bonjour du test");
+            })
+        });
+    }
+
+    #[test]
+    fn language_selection_errors_are_returned_by_wrappers() {
+        force_inventory_link();
+        let i18n = I18n::new_with_language(language("en-US")).unwrap();
+
+        assert!(i18n.select_language(language("de")).is_err());
+        assert!(I18n::new_with_language(language("de")).is_err());
+    }
+
+    #[test]
+    fn fluent_args_can_be_passed_through_fallback_localizer() {
+        let mut args = FluentArgs::new();
+        args.insert(
+            StaticFluentArgumentName::try_new("count").unwrap(),
+            es_fluent::FluentValue::from(3),
+        );
+
+        assert_eq!(
+            FallbackLocalizer.localize(static_entry("items-total"), Some(&args)),
+            Some("Items Total".to_string())
+        );
+    }
+
+    #[cfg(feature = "component")]
+    static COMPONENT_LOCALE_LOCK: Mutex<()> = Mutex::new(());
+
+    #[cfg(feature = "component")]
+    fn component_locale_lock() -> std::sync::MutexGuard<'static, ()> {
+        COMPONENT_LOCALE_LOCK.lock().unwrap()
+    }
+
+    #[cfg(feature = "component")]
+    #[test]
+    fn component_language_parses_component_locale_or_uses_fallback() {
+        let _guard = component_locale_lock();
+        let fallback = language("en-US");
+
+        gpui_component::set_locale("fr");
+        assert_eq!(component_language(fallback.clone()), language("fr"));
+
+        gpui_component::set_locale("not a locale");
         assert_eq!(component_language(fallback.clone()), fallback);
+    }
+
+    #[cfg(feature = "component")]
+    #[test]
+    fn init_from_component_locale_uses_current_component_locale() {
+        let _guard = component_locale_lock();
+        force_inventory_link();
+        gpui_component::set_locale("en-US");
+
+        with_test_app(|cx| {
+            cx.update(|cx| {
+                init_from_component_locale(cx, language("fr")).unwrap();
+                assert_eq!(localize_message(&*cx, &TestMessage), "Hello from test");
+            })
+        });
+    }
+
+    #[cfg(feature = "component")]
+    #[test]
+    fn set_component_locale_updates_component_and_i18n() {
+        let _guard = component_locale_lock();
+        force_inventory_link();
+
+        with_test_app(|cx| {
+            cx.update(|cx| {
+                assert_eq!(
+                    set_component_locale(cx, "fr", language("en-US")).unwrap(),
+                    language("fr")
+                );
+                assert_eq!(&*gpui_component::locale(), "fr");
+                assert_eq!(localize_message(&*cx, &TestMessage), "Bonjour du test");
+
+                assert_eq!(
+                    set_component_locale(cx, "not a locale", language("en-US")).unwrap(),
+                    language("en-US")
+                );
+                assert_eq!(&*gpui_component::locale(), "en-US");
+                assert_eq!(localize_message(&*cx, &TestMessage), "Hello from test");
+            })
+        });
+    }
+
+    #[cfg(feature = "component")]
+    #[test]
+    fn sync_component_locale_updates_i18n_when_global_exists() {
+        let _guard = component_locale_lock();
+        force_inventory_link();
+
+        with_test_app(|cx| {
+            cx.update(|cx| {
+                init_with_language(cx, language("en-US")).unwrap();
+                gpui_component::set_locale("fr");
+
+                assert_eq!(
+                    sync_component_locale(&*cx, language("en-US")).unwrap(),
+                    language("fr")
+                );
+                assert_eq!(localize_message(&*cx, &TestMessage), "Bonjour du test");
+            })
+        });
+    }
+
+    #[cfg(feature = "component")]
+    #[test]
+    fn sync_component_locale_returns_language_without_i18n_global() {
+        let _guard = component_locale_lock();
+        gpui_component::set_locale("fr");
+
+        with_test_app(|cx| {
+            cx.update(|cx| {
+                assert_eq!(
+                    sync_component_locale(&*cx, language("en-US")).unwrap(),
+                    language("fr")
+                );
+            })
+        });
     }
 }
