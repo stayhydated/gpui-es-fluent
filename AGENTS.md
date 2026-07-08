@@ -39,9 +39,8 @@ Before editing, classify the change:
    `src/lib.rs`.
 3. **Validate narrowly**: run the smallest cargo or `just` command that proves
    the edited crate, feature set, docs, or workflow still compiles or runs.
-4. **Avoid workspace features**: do not use Cargo workspace package,
-   dependency, lint inheritance, `--workspace`, or `-p gpui-es-fluent` for
-   routine edits in this single-crate repository.
+4. **Match the command surface**: use the root `justfile` for local recipes and
+   the workflow commands in `.github/workflows/ci.yml` when matching CI matters.
 
 ## Audience Labels
 
@@ -86,9 +85,11 @@ they describe.
   needs the corresponding repository workflow.
 - Use `cargo check` for default-feature API and behavior changes.
 - Use `cargo check --all-features` for `component` feature-gate changes.
-- Use `cargo doc --all-features --no-deps` for rustdoc or crate README
-  changes.
+- Use `cargo doc --workspace --all-features --no-deps --locked` when matching
+  the CI documentation job for rustdoc or crate README changes.
 - Use `cargo test --all-features` when behavior changes are covered by tests.
+- CI runs locked workspace-form tests, formatting, clippy, docs,
+  cargo-machete, coverage, and Codecov publishing from `.github/workflows/ci.yml`.
 - If validation cannot be run, state why and what remains unvalidated.
 - Do not claim a change works unless it was validated or the remaining risk is
   explicitly documented.
