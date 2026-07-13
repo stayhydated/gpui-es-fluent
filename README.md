@@ -14,12 +14,10 @@ resources.
 - `init`, `init_with_language`, and `replace_with_language` for installing the
   GPUI global.
 - `change_locale` for selecting a new language on the installed global.
-- `localize_message` and `localize_label`, which use the installed global when
-  present and fall back to readable text when it is not.
-- `try_localize_message`, which returns `None` instead of using fallback text
-  when no global is installed.
-- `fallback_message`, `fallback_label`, `FallbackLocalizer`, and `humanize_key`
-  for deterministic fallback rendering.
+- `localize_message` and `localize_label`, which require an installed global
+  and fail hard when a typed Fluent resource is missing.
+- `try_localize_message` and `try_localize_label`, which return `None` when the
+  global or typed resource is missing and the caller wants to handle that state.
 - `Language` and `CurrentLanguage` for typed language state.
 - Optional `gpui-component` locale helpers behind the `component` feature.
 
@@ -56,17 +54,18 @@ let title = gpui_es_fluent::localize_message(cx, &message);
 let label = gpui_es_fluent::localize_label::<SettingsLabel>(cx);
 ```
 
-`localize_message` and `localize_label` render fallback text when the `I18n`
-global is not installed. Fallback rendering strips a trailing `_label`, splits
-IDs on `_` and `-`, drops empty segments, and uppercases the first character of
-each remaining segment.
+`localize_message` and `localize_label` panic when the `I18n` global is not
+installed or the typed resource is missing. This keeps untranslated keys out of
+user-facing output.
 
-Use `try_localize_message` when absence of the global should remain observable:
+Use a `try_*` helper only when absence is an expected state:
 
 ```rust,ignore
 if let Some(text) = gpui_es_fluent::try_localize_message(cx, &message) {
     render(text);
 }
+
+let maybe_label = gpui_es_fluent::try_localize_label::<SettingsLabel>(cx);
 ```
 
 ## Locale Selection
@@ -97,19 +96,19 @@ Call `init`, `init_with_language`, or `replace_with_language` before calling
 
 With the `component` feature enabled:
 
-- `component_language(fallback)` reads `gpui_component::locale()` and falls back
-  to a typed `LanguageIdentifier` when the component locale is invalid.
-- `init_from_component_locale(cx, fallback)` initializes `I18n` from the current
+- `component_language()` reads and validates `gpui_component::locale()`,
+  returning a typed `ComponentLocaleError` for invalid state.
+- `init_from_component_locale(cx)` initializes `I18n` from the current
   `gpui-component` locale.
-- `set_component_locale(cx, locale, fallback)` sets the `gpui-component` locale,
+- `set_component_locale(cx, locale)` sets the `gpui-component` locale,
   replaces `I18n` to match it, and returns the selected language.
-- `sync_component_locale(cx, fallback)` reads the current component locale and
+- `sync_component_locale(cx)` reads the current component locale and
   applies it to the installed `I18n` global when one exists, returning a
   localization error when the installed manager rejects the selected language.
 
-Parse fallback strings once at the caller boundary:
+Invalid component locale strings are explicit errors:
 
 ```rust,ignore
-let fallback = "en-US".parse::<unic_langid::LanguageIdentifier>()?;
-let language = gpui_es_fluent::component_language(fallback);
+gpui_component::set_locale("en-US");
+let language = gpui_es_fluent::component_language()?;
 ```

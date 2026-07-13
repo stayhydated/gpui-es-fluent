@@ -1,9 +1,6 @@
 #![doc = include_str!("../README.md")]
 
-use es_fluent::{
-    FluentArgs, FluentLabel, FluentLocalizer, FluentLocalizerExt as _, FluentMessage,
-    registry::{StaticFluentDomain, StaticFluentEntryId},
-};
+use es_fluent::{FluentLabel, FluentLocalizerExt as _, FluentMessage};
 use gpui::App;
 use std::borrow::Borrow;
 use strum::IntoEnumIterator;
@@ -69,12 +66,28 @@ impl I18n {
         self.manager.localize_message(message)
     }
 
+    /// Attempts to localize a generated message through the underlying manager.
+    pub fn try_localize_message<T>(&self, message: &T) -> Option<String>
+    where
+        T: FluentMessage + ?Sized,
+    {
+        self.manager.try_localize_message(message)
+    }
+
     /// Localizes a generated label through the underlying manager.
     pub fn localize_label<T>(&self) -> String
     where
         T: FluentLabel,
     {
         T::localize_label(&self.manager)
+    }
+
+    /// Attempts to localize a generated label through the underlying manager.
+    pub fn try_localize_label<T>(&self) -> Option<String>
+    where
+        T: FluentLabel,
+    {
+        T::try_localize_label(&self.manager)
     }
 }
 
@@ -182,15 +195,23 @@ pub fn change_locale(
 
 /// Attempts to localize `message` with the installed [`I18n`] global.
 ///
-/// Returns `None` when no [`I18n`] global has been installed.
+/// Returns `None` when no [`I18n`] global has been installed or the typed
+/// message is missing from the active resources.
 pub fn try_localize_message<T>(cx: &impl Borrow<App>, message: &T) -> Option<String>
 where
     T: FluentMessage + ?Sized,
 {
-    Some(cx.borrow().try_global::<I18n>()?.localize_message(message))
+    cx.borrow()
+        .try_global::<I18n>()?
+        .try_localize_message(message)
 }
 
-/// Localizes `message`, falling back to [`fallback_message`] when no global exists.
+/// Localizes `message` through the installed [`I18n`] global.
+///
+/// # Panics
+///
+/// Panics when no global is installed or when the typed Fluent message is
+/// missing from the active resources.
 pub fn localize_message<T>(cx: &impl Borrow<App>, message: &T) -> String
 where
     T: FluentMessage + ?Sized,
@@ -198,10 +219,26 @@ where
     cx.borrow()
         .try_global::<I18n>()
         .map(|i18n| i18n.localize_message(message))
-        .unwrap_or_else(|| fallback_message(message))
+        .unwrap_or_else(|| panic!("gpui-es-fluent I18n global is not installed"))
 }
 
-/// Localizes a generated label, falling back to [`fallback_label`] when no global exists.
+/// Attempts to localize a generated label with the installed [`I18n`] global.
+///
+/// Returns `None` when no global is installed or the typed label is missing
+/// from the active resources.
+pub fn try_localize_label<T>(cx: &impl Borrow<App>) -> Option<String>
+where
+    T: FluentLabel,
+{
+    cx.borrow().try_global::<I18n>()?.try_localize_label::<T>()
+}
+
+/// Localizes a generated label through the installed [`I18n`] global.
+///
+/// # Panics
+///
+/// Panics when no global is installed or when the typed Fluent label is
+/// missing from the active resources.
 pub fn localize_label<T>(cx: &impl Borrow<App>) -> String
 where
     T: FluentLabel,
@@ -209,81 +246,42 @@ where
     cx.borrow()
         .try_global::<I18n>()
         .map(I18n::localize_label::<T>)
-        .unwrap_or_else(fallback_label::<T>)
+        .unwrap_or_else(|| panic!("gpui-es-fluent I18n global is not installed"))
 }
 
-/// Renders a generated message with the fallback localizer.
-pub fn fallback_message<T>(message: &T) -> String
-where
-    T: FluentMessage + ?Sized,
-{
-    FallbackLocalizer.localize_message(message)
-}
-
-/// Renders a generated label with the fallback localizer.
-pub fn fallback_label<T>() -> String
-where
-    T: FluentLabel,
-{
-    es_fluent::fallback_label::<T>()
-}
-
-/// Localizer that renders message and label IDs as readable fallback text.
-pub struct FallbackLocalizer;
-
-impl FluentLocalizer for FallbackLocalizer {
-    fn localize<'a>(
-        &self,
-        id: StaticFluentEntryId,
-        _args: Option<&FluentArgs<'a>>,
-    ) -> Option<String> {
-        Some(es_fluent::humanize_fluent_entry_id(id))
-    }
-
-    fn localize_in_domain<'a>(
-        &self,
-        _domain: StaticFluentDomain,
-        id: StaticFluentEntryId,
-        _args: Option<&FluentArgs<'a>>,
-    ) -> Option<String> {
-        Some(es_fluent::humanize_fluent_entry_id(id))
-    }
-}
-
-/// Converts a Fluent entry ID into display text for fallback rendering.
-///
-/// The conversion strips a trailing `_label`, splits on `_` and `-`, drops empty
-/// segments, and uppercases the first character of each remaining segment.
-pub fn humanize_key(id: &str) -> String {
-    let id = id.strip_suffix("_label").unwrap_or(id);
-    let mut output = String::with_capacity(id.len());
-
-    for part in id.split(['_', '-']).filter(|part| !part.is_empty()) {
-        if !output.is_empty() {
-            output.push(' ');
-        }
-
-        let Some(first) = part.chars().next() else {
-            continue;
-        };
-
-        output.extend(first.to_uppercase());
-        output.push_str(&part[first.len_utf8()..]);
-    }
-
-    output
+#[cfg(feature = "component")]
+/// Errors produced while synchronizing `gpui-component` locale state.
+#[derive(Debug, thiserror::Error)]
+pub enum ComponentLocaleError {
+    /// The component locale is not a valid Unicode language identifier.
+    #[error("invalid gpui-component locale `{locale}`")]
+    InvalidLocale {
+        /// The rejected locale string.
+        locale: String,
+        /// The language identifier parse error.
+        #[source]
+        source: unic_langid::LanguageIdentifierError,
+    },
+    /// The embedded localization manager could not be initialized.
+    #[error("failed to initialize gpui-es-fluent localization")]
+    Initialization(#[from] EmbeddedInitError),
+    /// The installed localization manager rejected the selected language.
+    #[error("failed to select gpui-component locale")]
+    Selection(#[from] LocalizationError),
 }
 
 #[cfg(feature = "component")]
 /// Reads the current `gpui-component` locale as a language identifier.
 ///
-/// If the component locale is invalid, the already-parsed `fallback` language
-/// is returned instead.
-pub fn component_language(fallback: impl Into<LanguageIdentifier>) -> LanguageIdentifier {
-    let fallback = fallback.into();
-    gpui_component::locale()
+/// # Errors
+///
+/// Returns [`ComponentLocaleError::InvalidLocale`] when `gpui-component`
+/// contains an invalid language identifier.
+pub fn component_language() -> Result<LanguageIdentifier, ComponentLocaleError> {
+    let locale = gpui_component::locale().to_string();
+    locale
         .parse::<LanguageIdentifier>()
-        .unwrap_or(fallback)
+        .map_err(|source| ComponentLocaleError::InvalidLocale { locale, source })
 }
 
 #[cfg(feature = "component")]
@@ -291,34 +289,31 @@ pub fn component_language(fallback: impl Into<LanguageIdentifier>) -> LanguageId
 ///
 /// # Errors
 ///
-/// Returns [`EmbeddedInitError`] when no [`I18n`] global exists and the embedded
-/// localization manager cannot be initialized for the component locale.
-pub fn init_from_component_locale(
-    cx: &mut App,
-    fallback: impl Into<LanguageIdentifier>,
-) -> Result<(), EmbeddedInitError> {
-    init_with_language(cx, component_language(fallback))
+/// Returns [`ComponentLocaleError`] when the component locale is invalid or
+/// the embedded localization manager cannot initialize it.
+pub fn init_from_component_locale(cx: &mut App) -> Result<(), ComponentLocaleError> {
+    init_with_language(cx, component_language()?)?;
+    Ok(())
 }
 
 #[cfg(feature = "component")]
 /// Sets `gpui-component`'s locale and replaces the [`I18n`] global to match it.
 ///
-/// Invalid `locale` values fall back to `fallback`, which must be a valid
-/// language identifier. The selected language is returned.
-///
 /// # Errors
 ///
-/// Returns [`EmbeddedInitError`] when the embedded localization manager cannot
-/// be initialized for the selected language.
+/// Returns [`ComponentLocaleError`] when `locale` is invalid or the embedded
+/// localization manager cannot initialize it.
 pub fn set_component_locale(
     cx: &mut App,
     locale: impl AsRef<str>,
-    fallback: impl Into<LanguageIdentifier>,
-) -> Result<LanguageIdentifier, EmbeddedInitError> {
-    let language = locale
-        .as_ref()
-        .parse::<LanguageIdentifier>()
-        .unwrap_or_else(|_| fallback.into());
+) -> Result<LanguageIdentifier, ComponentLocaleError> {
+    let locale = locale.as_ref();
+    let language = locale.parse::<LanguageIdentifier>().map_err(|source| {
+        ComponentLocaleError::InvalidLocale {
+            locale: locale.to_owned(),
+            source,
+        }
+    })?;
 
     gpui_component::set_locale(&language.to_string());
     replace_with_language(cx, language.clone())?;
@@ -332,13 +327,12 @@ pub fn set_component_locale(
 ///
 /// # Errors
 ///
-/// Returns [`LocalizationError`] when an installed manager cannot select the
-/// parsed language.
+/// Returns [`ComponentLocaleError`] when the component locale is invalid or an
+/// installed manager cannot select the parsed language.
 pub fn sync_component_locale(
     cx: &impl Borrow<App>,
-    fallback: impl Into<LanguageIdentifier>,
-) -> Result<LanguageIdentifier, LocalizationError> {
-    let language = component_language(fallback);
+) -> Result<LanguageIdentifier, ComponentLocaleError> {
+    let language = component_language()?;
     if let Some(i18n) = cx.borrow().try_global::<I18n>() {
         i18n.select_language(language.clone())?;
     }
@@ -348,7 +342,7 @@ pub fn sync_component_locale(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use es_fluent::registry::StaticFluentArgumentName;
+    use es_fluent::registry::{StaticFluentDomain, StaticFluentEntryId};
     use es_fluent_manager_embedded::__manager_core::{
         FluentArgumentMap, I18nModule, I18nModuleDescriptor, I18nModuleRegistration, Localizer,
         ModuleData,
@@ -473,35 +467,6 @@ mod tests {
     }
 
     #[test]
-    fn humanize_key_strips_label_suffix_and_title_cases_segments() {
-        assert_eq!(
-            humanize_key("sales-order_status_label"),
-            "Sales Order Status"
-        );
-        assert_eq!(humanize_key("__line-item__"), "Line Item");
-    }
-
-    #[test]
-    fn fallback_helpers_render_readable_message_and_label_text() {
-        let localizer = FallbackLocalizer;
-
-        assert_eq!(fallback_message(&TestMessage), "Test Message");
-        assert_eq!(fallback_label::<TestLabel>(), "Test");
-        assert_eq!(
-            localizer.localize(static_entry("primary-action_label"), None),
-            Some("Primary Action".to_string())
-        );
-        assert_eq!(
-            localizer.localize_in_domain(
-                static_domain(TEST_DOMAIN),
-                static_entry("secondary_action"),
-                Some(&FluentArgs::new()),
-            ),
-            Some("Secondary Action".to_string())
-        );
-    }
-
-    #[test]
     fn i18n_facade_delegates_to_embedded_manager() {
         force_inventory_link();
         let i18n = I18n::new_with_language(language("en-US")).unwrap();
@@ -524,17 +489,26 @@ mod tests {
         force_inventory_link();
         let i18n = I18n::new().unwrap();
 
-        assert_eq!(i18n.localize_message(&TestMessage), "test_message");
-        assert_eq!(i18n.localize_label::<TestLabel>(), "test_label");
+        assert_eq!(i18n.try_localize_message(&TestMessage), None);
+        assert_eq!(i18n.try_localize_label::<TestLabel>(), None);
     }
 
     #[test]
-    fn app_helpers_use_fallbacks_without_i18n_global() {
+    fn app_try_helpers_report_a_missing_i18n_global() {
         with_test_app(|cx| {
             cx.update(|cx| {
                 assert_eq!(try_localize_message(&*cx, &TestMessage), None);
-                assert_eq!(localize_message(&*cx, &TestMessage), "Test Message");
-                assert_eq!(localize_label::<TestLabel>(&*cx), "Test");
+                assert_eq!(try_localize_label::<TestLabel>(&*cx), None);
+            })
+        });
+    }
+
+    #[test]
+    #[should_panic(expected = "gpui-es-fluent I18n global is not installed")]
+    fn app_localize_message_panics_without_i18n_global() {
+        with_test_app(|cx| {
+            cx.update(|cx| {
+                localize_message(&*cx, &TestMessage);
             })
         });
     }
@@ -546,10 +520,7 @@ mod tests {
         with_test_app(|cx| {
             cx.update(|cx| {
                 init(cx).unwrap();
-                assert_eq!(
-                    try_localize_message(&*cx, &TestMessage),
-                    Some("test_message".to_string())
-                );
+                assert_eq!(try_localize_message(&*cx, &TestMessage), None);
 
                 let initial = cx.global::<I18n>().manager() as *const EmbeddedI18n;
                 init(cx).unwrap();
@@ -594,39 +565,30 @@ mod tests {
         assert!(I18n::new_with_language(language("de")).is_err());
     }
 
-    #[test]
-    fn fluent_args_can_be_passed_through_fallback_localizer() {
-        let mut args = FluentArgs::new();
-        args.insert(
-            StaticFluentArgumentName::try_new("count").unwrap(),
-            es_fluent::FluentValue::from(3),
-        );
-
-        assert_eq!(
-            FallbackLocalizer.localize(static_entry("items-total"), Some(&args)),
-            Some("Items Total".to_string())
-        );
-    }
-
     #[cfg(feature = "component")]
     static COMPONENT_LOCALE_LOCK: Mutex<()> = Mutex::new(());
 
     #[cfg(feature = "component")]
     fn component_locale_lock() -> std::sync::MutexGuard<'static, ()> {
-        COMPONENT_LOCALE_LOCK.lock().unwrap()
+        COMPONENT_LOCALE_LOCK
+            .lock()
+            .unwrap_or_else(|error| error.into_inner())
     }
 
     #[cfg(feature = "component")]
     #[test]
-    fn component_language_parses_component_locale_or_uses_fallback() {
+    fn component_language_parses_component_locale_and_rejects_invalid_state() {
         let _guard = component_locale_lock();
-        let fallback = language("en-US");
 
         gpui_component::set_locale("fr");
-        assert_eq!(component_language(fallback.clone()), language("fr"));
+        assert_eq!(component_language().unwrap(), language("fr"));
 
         gpui_component::set_locale("not a locale");
-        assert_eq!(component_language(fallback.clone()), fallback);
+        assert!(matches!(
+            component_language(),
+            Err(ComponentLocaleError::InvalidLocale { locale, .. }) if locale == "not a locale"
+        ));
+        gpui_component::set_locale("en-US");
     }
 
     #[cfg(feature = "component")]
@@ -638,7 +600,7 @@ mod tests {
 
         with_test_app(|cx| {
             cx.update(|cx| {
-                init_from_component_locale(cx, language("fr")).unwrap();
+                init_from_component_locale(cx).unwrap();
                 assert_eq!(localize_message(&*cx, &TestMessage), "Hello from test");
             })
         });
@@ -652,19 +614,16 @@ mod tests {
 
         with_test_app(|cx| {
             cx.update(|cx| {
-                assert_eq!(
-                    set_component_locale(cx, "fr", language("en-US")).unwrap(),
-                    language("fr")
-                );
+                assert_eq!(set_component_locale(cx, "fr").unwrap(), language("fr"));
                 assert_eq!(&*gpui_component::locale(), "fr");
                 assert_eq!(localize_message(&*cx, &TestMessage), "Bonjour du test");
 
-                assert_eq!(
-                    set_component_locale(cx, "not a locale", language("en-US")).unwrap(),
-                    language("en-US")
-                );
-                assert_eq!(&*gpui_component::locale(), "en-US");
-                assert_eq!(localize_message(&*cx, &TestMessage), "Hello from test");
+                assert!(matches!(
+                    set_component_locale(cx, "not a locale"),
+                    Err(ComponentLocaleError::InvalidLocale { locale, .. })
+                        if locale == "not a locale"
+                ));
+                assert_eq!(&*gpui_component::locale(), "fr");
             })
         });
     }
@@ -680,10 +639,7 @@ mod tests {
                 init_with_language(cx, language("en-US")).unwrap();
                 gpui_component::set_locale("fr");
 
-                assert_eq!(
-                    sync_component_locale(&*cx, language("en-US")).unwrap(),
-                    language("fr")
-                );
+                assert_eq!(sync_component_locale(&*cx).unwrap(), language("fr"));
                 assert_eq!(localize_message(&*cx, &TestMessage), "Bonjour du test");
             })
         });
@@ -697,10 +653,7 @@ mod tests {
 
         with_test_app(|cx| {
             cx.update(|cx| {
-                assert_eq!(
-                    sync_component_locale(&*cx, language("en-US")).unwrap(),
-                    language("fr")
-                );
+                assert_eq!(sync_component_locale(&*cx).unwrap(), language("fr"));
             })
         });
     }

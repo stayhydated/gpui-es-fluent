@@ -1188,7 +1188,7 @@ dependencies = [
  "libc",
  "option-ext",
  "redox_users",
- "windows-sys 0.61.2",
+ "windows-sys 0.59.0",
 ]
 
 [[package]]
@@ -1338,29 +1338,26 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "39cab71617ae0d63f51a36d69f866391735b51691dbda63cf6f96d042b63efeb"
 dependencies = [
  "libc",
- "windows-sys 0.61.2",
+ "windows-sys 0.52.0",
 ]
 
 [[package]]
 name = "es-fluent"
 version = "0.18.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0ddbc41e43442c1fde3a43cc052b8287e04f295072fba208171a313d545d9280"
+source = "git+https://github.com/stayhydated/es-fluent#d7766591402ea94af885abf5f4b333925b8a0560"
 dependencies = [
  "es-fluent-derive",
  "es-fluent-manager-core",
  "es-fluent-shared",
  "fluent-bundle",
  "inventory",
- "tracing",
  "unic-langid",
 ]
 
 [[package]]
 name = "es-fluent-derive"
 version = "0.18.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "92c891c2bf3894907ab1f53edafbd25dd0b3fd8e1dbcb6879811c5147fe04085"
+source = "git+https://github.com/stayhydated/es-fluent#d7766591402ea94af885abf5f4b333925b8a0560"
 dependencies = [
  "darling",
  "es-fluent-derive-core",
@@ -1373,8 +1370,7 @@ dependencies = [
 [[package]]
 name = "es-fluent-derive-core"
 version = "0.18.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c09c6532cc5fc3683f69c49d15598355fc5184229c791632179d1ca14e52f9bc"
+source = "git+https://github.com/stayhydated/es-fluent#d7766591402ea94af885abf5f4b333925b8a0560"
 dependencies = [
  "bon",
  "darling",
@@ -1393,8 +1389,7 @@ dependencies = [
 [[package]]
 name = "es-fluent-manager-core"
 version = "0.18.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d428c52252f96eaefff8358f15495161e392a457cab05cf9ab593dc12abd91c6"
+source = "git+https://github.com/stayhydated/es-fluent#d7766591402ea94af885abf5f4b333925b8a0560"
 dependencies = [
  "es-fluent-shared",
  "fluent-bundle",
@@ -1413,8 +1408,7 @@ dependencies = [
 [[package]]
 name = "es-fluent-manager-embedded"
 version = "0.18.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d1cdcbe9131084c935a3826b4b3fd8699a570d648efb1407eb097a5fc97ea103"
+source = "git+https://github.com/stayhydated/es-fluent#d7766591402ea94af885abf5f4b333925b8a0560"
 dependencies = [
  "es-fluent",
  "es-fluent-manager-core",
@@ -1427,8 +1421,7 @@ dependencies = [
 [[package]]
 name = "es-fluent-manager-macros"
 version = "0.18.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "43a32687d9d2ee4b99723d2c28cf10dbb2cc5fd2193dff722334742d5615759e"
+source = "git+https://github.com/stayhydated/es-fluent#d7766591402ea94af885abf5f4b333925b8a0560"
 dependencies = [
  "es-fluent-derive-core",
  "es-fluent-shared",
@@ -1443,8 +1436,7 @@ dependencies = [
 [[package]]
 name = "es-fluent-shared"
 version = "0.18.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1ecefb31b992b63784a0a9ed25669c9b666c94c2627e7118e01837aae1e4e461"
+source = "git+https://github.com/stayhydated/es-fluent#d7766591402ea94af885abf5f4b333925b8a0560"
 dependencies = [
  "anyhow",
  "camino",
@@ -1467,8 +1459,7 @@ dependencies = [
 [[package]]
 name = "es-fluent-toml"
 version = "0.18.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4e33bc08e59f6891c1c930f885a378e59759169d774bf2cc15e447517e3c8681"
+source = "git+https://github.com/stayhydated/es-fluent#d7766591402ea94af885abf5f4b333925b8a0560"
 dependencies = [
  "bon",
  "es-fluent-shared",
@@ -2177,6 +2168,7 @@ dependencies = [
  "gpui 0.2.2 (git+https://github.com/zed-industries/zed?rev=c545fb67d0ce13e335bff76f7c08986000333f2c)",
  "gpui-component",
  "strum 0.28.0",
+ "thiserror 2.0.18",
  "unic-langid",
 ]
 
@@ -3346,7 +3338,7 @@ version = "0.50.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7957b9740744892f114936ab4a57b3f487491bbeafaf8083688b16841a4240e5"
 dependencies = [
- "windows-sys 0.61.2",
+ "windows-sys 0.59.0",
 ]
 
 [[package]]
@@ -4150,7 +4142,7 @@ dependencies = [
  "once_cell",
  "socket2",
  "tracing",
- "windows-sys 0.61.2",
+ "windows-sys 0.52.0",
 ]
 
 [[package]]
@@ -4646,7 +4638,7 @@ dependencies = [
  "errno",
  "libc",
  "linux-raw-sys 0.12.1",
- "windows-sys 0.61.2",
+ "windows-sys 0.52.0",
 ]
 
 [[package]]
@@ -5513,7 +5505,7 @@ dependencies = [
  "getrandom 0.4.3",
  "once_cell",
  "rustix 1.1.4",
- "windows-sys 0.61.2",
+ "windows-sys 0.52.0",
 ]
 
 [[package]]
@@ -6405,7 +6397,7 @@ version = "0.1.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c2a7b1c03c876122aa43f3020e6c3c3ee5c05081c9a00739faf7503aeba10d22"
 dependencies = [
- "windows-sys 0.61.2",
+ "windows-sys 0.52.0",
 ]
 
 [[package]]

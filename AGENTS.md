@@ -23,8 +23,9 @@ helpers for `es-fluent`.
 
 Its priorities are:
 
-1. **Public API clarity**: keep the `I18n` global, language helpers, fallback
-   rendering, and locale functions easy to use from GPUI applications.
+1. **Public API clarity**: keep the `I18n` global, language helpers,
+   hard-failing localization, fallible `try_*` lookups, and locale functions
+   easy to use from GPUI applications.
 2. **Feature fit**: keep `gpui-component` integration behind the `component`
    feature.
 
@@ -72,7 +73,7 @@ they describe.
 - `src/lib.rs`
   Audience: **User-facing**
   Role: single public crate for GPUI app-global `I18n`, typed language bounds,
-  locale selection helpers, fallback rendering, and optional
+  locale selection helpers, strict localization, and optional
   `gpui-component` locale integration.
 
 ## Validation and Editing Rules
