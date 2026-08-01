@@ -1395,7 +1395,7 @@ dependencies = [
 [[package]]
 name = "es-fluent"
 version = "0.18.1"
-source = "git+https://github.com/stayhydated/es-fluent#d7766591402ea94af885abf5f4b333925b8a0560"
+source = "git+https://github.com/stayhydated/es-fluent#07102e7203c76525d78c260a7c111f807e43ef51"
 dependencies = [
  "es-fluent-derive",
  "es-fluent-manager-core",
@@ -1408,7 +1408,7 @@ dependencies = [
 [[package]]
 name = "es-fluent-derive"
 version = "0.18.1"
-source = "git+https://github.com/stayhydated/es-fluent#d7766591402ea94af885abf5f4b333925b8a0560"
+source = "git+https://github.com/stayhydated/es-fluent#07102e7203c76525d78c260a7c111f807e43ef51"
 dependencies = [
  "darling",
  "es-fluent-derive-core",
@@ -1421,7 +1421,7 @@ dependencies = [
 [[package]]
 name = "es-fluent-derive-core"
 version = "0.18.1"
-source = "git+https://github.com/stayhydated/es-fluent#d7766591402ea94af885abf5f4b333925b8a0560"
+source = "git+https://github.com/stayhydated/es-fluent#07102e7203c76525d78c260a7c111f807e43ef51"
 dependencies = [
  "bon",
  "darling",
@@ -1440,7 +1440,7 @@ dependencies = [
 [[package]]
 name = "es-fluent-manager-core"
 version = "0.18.1"
-source = "git+https://github.com/stayhydated/es-fluent#d7766591402ea94af885abf5f4b333925b8a0560"
+source = "git+https://github.com/stayhydated/es-fluent#07102e7203c76525d78c260a7c111f807e43ef51"
 dependencies = [
  "es-fluent-shared",
  "fluent-bundle",
@@ -1459,7 +1459,7 @@ dependencies = [
 [[package]]
 name = "es-fluent-manager-embedded"
 version = "0.18.1"
-source = "git+https://github.com/stayhydated/es-fluent#d7766591402ea94af885abf5f4b333925b8a0560"
+source = "git+https://github.com/stayhydated/es-fluent#07102e7203c76525d78c260a7c111f807e43ef51"
 dependencies = [
  "es-fluent",
  "es-fluent-manager-core",
@@ -1472,7 +1472,7 @@ dependencies = [
 [[package]]
 name = "es-fluent-manager-macros"
 version = "0.18.1"
-source = "git+https://github.com/stayhydated/es-fluent#d7766591402ea94af885abf5f4b333925b8a0560"
+source = "git+https://github.com/stayhydated/es-fluent#07102e7203c76525d78c260a7c111f807e43ef51"
 dependencies = [
  "es-fluent-derive-core",
  "es-fluent-shared",
@@ -1487,7 +1487,7 @@ dependencies = [
 [[package]]
 name = "es-fluent-shared"
 version = "0.18.1"
-source = "git+https://github.com/stayhydated/es-fluent#d7766591402ea94af885abf5f4b333925b8a0560"
+source = "git+https://github.com/stayhydated/es-fluent#07102e7203c76525d78c260a7c111f807e43ef51"
 dependencies = [
  "anyhow",
  "camino",
@@ -1510,7 +1510,7 @@ dependencies = [
 [[package]]
 name = "es-fluent-toml"
 version = "0.18.1"
-source = "git+https://github.com/stayhydated/es-fluent#d7766591402ea94af885abf5f4b333925b8a0560"
+source = "git+https://github.com/stayhydated/es-fluent#07102e7203c76525d78c260a7c111f807e43ef51"
 dependencies = [
  "bon",
  "es-fluent-shared",
@@ -2138,13 +2138,13 @@ dependencies = [
 [[package]]
 name = "gpui"
 version = "0.2.2"
-source = "git+https://github.com/zed-industries/zed#ac44e9f5df57a9e1a9d6deacddead974edabc8e7"
+source = "git+https://github.com/zed-industries/zed#5e1fd392f67e27fa1da91bad43eef7db1a5dec23"
 replace = "gpui 0.2.2 (git+https://github.com/zed-industries/zed?rev=1a246efd7e1b83ab568ec5e3e6c1a43a42e1abba)"
 
 [[package]]
 name = "gpui-component"
 version = "0.5.2"
-source = "git+https://github.com/longbridge/gpui-component#87103d0e73b240bdbee9ee4fe8604f92c1e9590a"
+source = "git+https://github.com/longbridge/gpui-component#88f102d13654fe25aa2fede076274b6b751a3704"
 dependencies = [
  "aho-corasick",
  "anyhow",
@@ -2192,7 +2192,7 @@ dependencies = [
 [[package]]
 name = "gpui-component-assets"
 version = "0.5.1"
-source = "git+https://github.com/longbridge/gpui-component#87103d0e73b240bdbee9ee4fe8604f92c1e9590a"
+source = "git+https://github.com/longbridge/gpui-component#88f102d13654fe25aa2fede076274b6b751a3704"
 dependencies = [
  "anyhow",
  "gpui 0.2.2 (git+https://github.com/zed-industries/zed)",
@@ -2206,7 +2206,7 @@ dependencies = [
 [[package]]
 name = "gpui-component-macros"
 version = "0.5.1"
-source = "git+https://github.com/longbridge/gpui-component#87103d0e73b240bdbee9ee4fe8604f92c1e9590a"
+source = "git+https://github.com/longbridge/gpui-component#88f102d13654fe25aa2fede076274b6b751a3704"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -2240,7 +2240,7 @@ dependencies = [
 [[package]]
 name = "gpui_macros"
 version = "0.1.0"
-source = "git+https://github.com/zed-industries/zed#ac44e9f5df57a9e1a9d6deacddead974edabc8e7"
+source = "git+https://github.com/zed-industries/zed#5e1fd392f67e27fa1da91bad43eef7db1a5dec23"
 replace = "gpui_macros 0.1.0 (git+https://github.com/zed-industries/zed?rev=1a246efd7e1b83ab568ec5e3e6c1a43a42e1abba)"
 
 [[package]]
@@ -2512,7 +2512,7 @@ dependencies = [
  "js-sys",
  "log",
  "wasm-bindgen",
- "windows-core 0.62.2",
+ "windows-core 0.57.0",
 ]
 
 [[package]]
@@ -6577,19 +6577,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "windows-core"
-version = "0.62.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b8e83a14d34d0623b51dce9581199302a221863196a1dde71a7663a4c2be9deb"
-dependencies = [
- "windows-implement 0.60.2",
- "windows-interface 0.59.3",
- "windows-link 0.2.1",
- "windows-result 0.4.1",
- "windows-strings 0.5.1",
-]
-
-[[package]]
 name = "windows-future"
 version = "0.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -6727,15 +6714,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "windows-result"
-version = "0.4.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7781fa89eaf60850ac3d2da7af8e5242a5ea78d1a11c49bf2910bb5a73853eb5"
-dependencies = [
- "windows-link 0.2.1",
-]
-
-[[package]]
 name = "windows-strings"
 version = "0.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -6761,15 +6739,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "56e6c93f3a0c3b36176cb1327a4958a0353d5d166c2a35cb268ace15e91d3b57"
 dependencies = [
  "windows-link 0.1.3",
-]
-
-[[package]]
-name = "windows-strings"
-version = "0.5.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7837d08f69c77cf6b07689544538e017c1bfcf57e34b4c0ff58e6c2cd3b37091"
-dependencies = [
- "windows-link 0.2.1",
 ]
 
 [[package]]
