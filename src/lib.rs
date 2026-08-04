@@ -342,10 +342,10 @@ pub fn sync_component_locale(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use es_fluent::registry::{StaticFluentDomain, StaticFluentEntryId};
+    use es_fluent::registry::StaticFluentMessageKey;
     use es_fluent_manager_embedded::__manager_core::{
         FluentArgumentMap, I18nModule, I18nModuleDescriptor, I18nModuleRegistration, Localizer,
-        ModuleData,
+        ModuleData, ModuleDomain,
     };
     use std::sync::{Mutex, Once};
     use unic_langid::langid;
@@ -355,9 +355,12 @@ mod tests {
     static TEST_SUPPORTED_LANGUAGES: &[LanguageIdentifier] = &[langid!("en-US"), langid!("fr")];
     static TEST_MODULE_DATA: ModuleData = ModuleData {
         name: TEST_DOMAIN,
-        domain: es_fluent_manager_embedded::__manager_core::__macro::static_domain(TEST_DOMAIN),
+        owner: es_fluent_manager_embedded::__manager_core::__macro::static_domain(TEST_DOMAIN),
         supported_languages: TEST_SUPPORTED_LANGUAGES,
-        namespaces: &[],
+        domains: &[ModuleDomain {
+            domain: es_fluent_manager_embedded::__manager_core::__macro::static_domain(TEST_DOMAIN),
+            namespaces: &[],
+        }],
     };
     static TEST_MODULE: TestModule = TestModule;
     static INVENTORY_ONCE: Once = Once::new();
@@ -399,11 +402,14 @@ mod tests {
 
         fn localize<'a>(
             &self,
-            id: StaticFluentEntryId,
+            key: StaticFluentMessageKey,
             _args: Option<&FluentArgumentMap<'a>>,
         ) -> Option<String> {
+            if key.owner() != TEST_DOMAIN || key.domain() != TEST_DOMAIN {
+                return None;
+            }
             let selected = self.selected.lock().unwrap().to_string();
-            let value = match (selected.as_str(), id.as_str()) {
+            let value = match (selected.as_str(), key.id().as_str()) {
                 ("en-US", "test_message") => "Hello from test",
                 ("en-US", "test_label") => "Test label",
                 ("fr", "test_message") => "Bonjour du test",
@@ -422,23 +428,15 @@ mod tests {
             &self,
             localize: &mut es_fluent::FluentMessageLookup<'_>,
         ) -> String {
-            localize(
-                static_domain(TEST_DOMAIN),
-                static_entry("test_message"),
-                None,
-            )
+            localize(static_key("test_message"), None)
         }
     }
 
     struct TestLabel;
 
     impl FluentLabel for TestLabel {
-        fn fluent_label_domain() -> StaticFluentDomain {
-            static_domain(TEST_DOMAIN)
-        }
-
-        fn fluent_label_id() -> StaticFluentEntryId {
-            static_entry("test_label")
+        fn fluent_label_key() -> StaticFluentMessageKey {
+            static_key("test_label")
         }
     }
 
@@ -448,12 +446,12 @@ mod tests {
         });
     }
 
-    fn static_domain(value: &'static str) -> StaticFluentDomain {
-        StaticFluentDomain::try_new(value).unwrap()
-    }
-
-    fn static_entry(value: &'static str) -> StaticFluentEntryId {
-        StaticFluentEntryId::try_new(value).unwrap()
+    fn static_key(id: &'static str) -> StaticFluentMessageKey {
+        es_fluent::registry::__macro::static_message_key(
+            TEST_DOMAIN,
+            es_fluent::registry::__macro::static_domain(TEST_DOMAIN),
+            es_fluent::registry::__macro::static_entry_id(id),
+        )
     }
 
     fn language(value: &str) -> LanguageIdentifier {
