@@ -1,0 +1,44 @@
+[package]
+name = "gpui-es-fluent-demo"
+version = "0.1.0"
+rust-version = "1.96"
+edition = "2024"
+license = "Unlicense"
+publish = false
+autobins = false
+
+[[example]]
+name = "demo"
+path = "src/main.rs"
+
+[dependencies]
+es-fluent = { git = "https://github.com/stayhydated/es-fluent" }
+es-fluent-manager-embedded = { git = "https://github.com/stayhydated/es-fluent" }
+gpui = { git = "https://github.com/zed-industries/zed", rev = "1a246efd7e1b83ab568ec5e3e6c1a43a42e1abba" }
+gpui-component = { git = "https://github.com/longbridge/gpui-component" }
+gpui-component-assets = { git = "https://github.com/longbridge/gpui-component" }
+gpui-es-fluent = { features = [ "component" ], path = "../.." }
+gpui_platform = { features = [
+  "font-kit",
+  "runtime_shaders",
+  "wayland",
+  "x11",
+], git = "https://github.com/zed-industries/zed", rev = "1a246efd7e1b83ab568ec5e3e6c1a43a42e1abba" }
+wasm-bindgen = "0.2"
+
+[lib]
+crate-type = [ "cdylib", "rlib" ]
+
+[build-dependencies]
+es-fluent-build = { git = "https://github.com/stayhydated/es-fluent" }
+
+[lints.rust]
+future_incompatible = "deny"
+nonstandard_style = "deny"
+unsafe_op_in_unsafe_fn = "deny"
+unused_must_use = "deny"
+
+[lints.clippy]
+all = { level = "warn", priority = -1 }
+dbg_macro = "deny"
+todo = "deny"

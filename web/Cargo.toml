@@ -1,0 +1,12 @@
+[package]
+name = "web"
+version = "0.1.0"
+rust-version = "1.96"
+edition = "2024"
+license = "MIT OR Apache-2.0"
+publish = false
+
+[dependencies]
+dioxus = { features = [ "launch", "lib", "router", "web" ], workspace = true }
+stayhydated-dioxus = { workspace = true }
+stayhydated-site = { workspace = true }

@@ -10,16 +10,36 @@ fmt:
     rumdl fmt .
 
 clippy:
-    cargo clippy --all-targets --all-features --locked -- -D warnings
+    cargo clippy --workspace --all-targets --all-features --locked -- -D warnings
 
 check:
-    cargo check --all-targets --all-features --locked
+    cargo check --workspace --all-targets --all-features --locked
 
 test:
-    cargo test --all-features --locked
+    cargo test --workspace --all-features --locked
 
 cov:
-    cargo llvm-cov --all-features --all-targets
+    cargo llvm-cov --workspace --all-features --all-targets \
+        --exclude gpui-es-fluent-demo \
+        --exclude xtask \
+        --exclude web
 
 test-publish:
-    cargo publish --dry-run --allow-dirty
+    cargo publish --workspace --dry-run --allow-dirty
+
+book:
+    mdbook serve book
+
+gpui-demo-build:
+    cargo xtask build gpui-demo
+
+web-build: gpui-demo-build
+    cargo xtask build book
+    cargo xtask build llms-txt
+    cargo xtask build web
+
+web: web-build
+    dx serve --package web
+
+web-preview: web-build
+    cargo xtask preview web
