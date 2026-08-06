@@ -12,8 +12,8 @@ name = "demo"
 path = "src/main.rs"
 
 [dependencies]
-es-fluent = { git = "https://github.com/stayhydated/es-fluent" }
-es-fluent-manager-embedded = { git = "https://github.com/stayhydated/es-fluent" }
+es-fluent = { git = "https://github.com/stayhydated/es-fluent", rev = "be9ccf8d9fc5e417e2605af3b648a6199cb39f8d", version = "0.18.1" }
+es-fluent-manager-embedded = { git = "https://github.com/stayhydated/es-fluent", rev = "be9ccf8d9fc5e417e2605af3b648a6199cb39f8d", version = "0.18.1" }
 gpui = { git = "https://github.com/zed-industries/zed", rev = "20ce54f8e407d575cc2d873ffa1c09a08c2689f1" }
 gpui-component = { git = "https://github.com/longbridge/gpui-component" }
 gpui-component-assets = { git = "https://github.com/longbridge/gpui-component" }
@@ -30,7 +30,7 @@ wasm-bindgen = "0.2"
 crate-type = [ "cdylib", "rlib" ]
 
 [build-dependencies]
-es-fluent-build = { git = "https://github.com/stayhydated/es-fluent" }
+es-fluent-build = { git = "https://github.com/stayhydated/es-fluent", rev = "be9ccf8d9fc5e417e2605af3b648a6199cb39f8d", version = "0.18.1" }
 
 [lints.rust]
 future_incompatible = "deny"

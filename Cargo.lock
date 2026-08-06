@@ -178,9 +178,9 @@ checksum = "683d7910e743518b0e34f1186f92494becacb047c7b6bf616c96772180fef923"
 
 [[package]]
 name = "android_system_properties"
-version = "0.1.5"
+version = "0.1.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "819e7219dbd41043ac279b19830f2efc897156490d7fd6ea916720117ee66311"
+checksum = "ae221649c9976a6f6c56ae1facf410f3ddb33cc661c4b7b61020a912d4237fbc"
 dependencies = [
  "libc",
 ]
@@ -1237,9 +1237,9 @@ dependencies = [
 
 [[package]]
 name = "clap"
-version = "4.6.5"
+version = "4.6.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "301b56658598e48f3648647ac6fc887be7e7108eddfa4e9b63fcf3ec58c0cadf"
+checksum = "473c7e07f409a8d772161724aa8db6a765a2532a70f9667eeb7b49d3d02fbdca"
 dependencies = [
  "clap_builder",
  "clap_derive",
@@ -1247,9 +1247,9 @@ dependencies = [
 
 [[package]]
 name = "clap_builder"
-version = "4.6.5"
+version = "4.6.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "94a65403d1a1bd28f7dc68eb8506e8874808ee5eecb59298de588e2e1407a078"
+checksum = "7b48fea5a88e9ae728a2dcbedbfc0e730f7d60da42e1cb049a83c9fb8b789889"
 dependencies = [
  "anstream",
  "anstyle",
@@ -1861,6 +1861,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "darling"
+version = "0.24.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "88490bf1b990d87eaaa7ac8aa887f629a08e7359765b4911faf63c3763347d23"
+dependencies = [
+ "darling_core 0.24.0",
+ "darling_macro 0.24.0",
+]
+
+[[package]]
 name = "darling_core"
 version = "0.20.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1901,6 +1911,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "darling_core"
+version = "0.24.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "084e274f91c482280130e1e34e0b8d6e66776a060d7b6de7b84289ca778868c4"
+dependencies = [
+ "ident_case",
+ "proc-macro2",
+ "quote",
+ "strsim",
+ "syn 3.0.3",
+]
+
+[[package]]
 name = "darling_macro"
 version = "0.20.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1931,6 +1954,17 @@ dependencies = [
  "darling_core 0.23.0",
  "quote",
  "syn 2.0.119",
+]
+
+[[package]]
+name = "darling_macro"
+version = "0.24.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "68f5792fa0d41cd2325ce0ffa64f0a340eaebd4971a3a0c5e1ffd2cc488a355e"
+dependencies = [
+ "darling_core 0.24.0",
+ "quote",
+ "syn 3.0.3",
 ]
 
 [[package]]
@@ -2829,7 +2863,7 @@ dependencies = [
 [[package]]
 name = "es-fluent"
 version = "0.18.1"
-source = "git+https://github.com/stayhydated/es-fluent#057d06dfa9ec290092bf5b89d250c266f8579165"
+source = "git+https://github.com/stayhydated/es-fluent?rev=be9ccf8d9fc5e417e2605af3b648a6199cb39f8d#be9ccf8d9fc5e417e2605af3b648a6199cb39f8d"
 dependencies = [
  "es-fluent-derive",
  "es-fluent-manager-core",
@@ -2842,7 +2876,7 @@ dependencies = [
 [[package]]
 name = "es-fluent-build"
 version = "0.18.1"
-source = "git+https://github.com/stayhydated/es-fluent#057d06dfa9ec290092bf5b89d250c266f8579165"
+source = "git+https://github.com/stayhydated/es-fluent?rev=be9ccf8d9fc5e417e2605af3b648a6199cb39f8d#be9ccf8d9fc5e417e2605af3b648a6199cb39f8d"
 dependencies = [
  "es-fluent-toml",
 ]
@@ -2850,23 +2884,23 @@ dependencies = [
 [[package]]
 name = "es-fluent-derive"
 version = "0.18.1"
-source = "git+https://github.com/stayhydated/es-fluent#057d06dfa9ec290092bf5b89d250c266f8579165"
+source = "git+https://github.com/stayhydated/es-fluent?rev=be9ccf8d9fc5e417e2605af3b648a6199cb39f8d#be9ccf8d9fc5e417e2605af3b648a6199cb39f8d"
 dependencies = [
- "darling 0.23.0",
+ "darling 0.24.0",
  "es-fluent-derive-core",
  "es-fluent-shared",
  "proc-macro2",
  "quote",
- "syn 2.0.119",
+ "syn 3.0.3",
 ]
 
 [[package]]
 name = "es-fluent-derive-core"
 version = "0.18.1"
-source = "git+https://github.com/stayhydated/es-fluent#057d06dfa9ec290092bf5b89d250c266f8579165"
+source = "git+https://github.com/stayhydated/es-fluent?rev=be9ccf8d9fc5e417e2605af3b648a6199cb39f8d#be9ccf8d9fc5e417e2605af3b648a6199cb39f8d"
 dependencies = [
  "bon",
- "darling 0.23.0",
+ "darling 0.24.0",
  "es-fluent-shared",
  "es-fluent-toml",
  "getset",
@@ -2875,14 +2909,14 @@ dependencies = [
  "proc-macro2",
  "quote",
  "strum 0.28.0",
- "syn 2.0.119",
+ "syn 3.0.3",
  "thiserror 2.0.19",
 ]
 
 [[package]]
 name = "es-fluent-manager-core"
 version = "0.18.1"
-source = "git+https://github.com/stayhydated/es-fluent#057d06dfa9ec290092bf5b89d250c266f8579165"
+source = "git+https://github.com/stayhydated/es-fluent?rev=be9ccf8d9fc5e417e2605af3b648a6199cb39f8d#be9ccf8d9fc5e417e2605af3b648a6199cb39f8d"
 dependencies = [
  "es-fluent-shared",
  "fluent-bundle",
@@ -2901,7 +2935,7 @@ dependencies = [
 [[package]]
 name = "es-fluent-manager-embedded"
 version = "0.18.1"
-source = "git+https://github.com/stayhydated/es-fluent#057d06dfa9ec290092bf5b89d250c266f8579165"
+source = "git+https://github.com/stayhydated/es-fluent?rev=be9ccf8d9fc5e417e2605af3b648a6199cb39f8d#be9ccf8d9fc5e417e2605af3b648a6199cb39f8d"
 dependencies = [
  "es-fluent",
  "es-fluent-manager-core",
@@ -2914,7 +2948,7 @@ dependencies = [
 [[package]]
 name = "es-fluent-manager-macros"
 version = "0.18.1"
-source = "git+https://github.com/stayhydated/es-fluent#057d06dfa9ec290092bf5b89d250c266f8579165"
+source = "git+https://github.com/stayhydated/es-fluent?rev=be9ccf8d9fc5e417e2605af3b648a6199cb39f8d#be9ccf8d9fc5e417e2605af3b648a6199cb39f8d"
 dependencies = [
  "es-fluent-derive-core",
  "es-fluent-shared",
@@ -2924,18 +2958,18 @@ dependencies = [
  "path-slash",
  "proc-macro2",
  "quote",
- "syn 2.0.119",
+ "syn 3.0.3",
 ]
 
 [[package]]
 name = "es-fluent-shared"
 version = "0.18.1"
-source = "git+https://github.com/stayhydated/es-fluent#057d06dfa9ec290092bf5b89d250c266f8579165"
+source = "git+https://github.com/stayhydated/es-fluent?rev=be9ccf8d9fc5e417e2605af3b648a6199cb39f8d#be9ccf8d9fc5e417e2605af3b648a6199cb39f8d"
 dependencies = [
  "anyhow",
  "camino",
  "clap",
- "darling 0.23.0",
+ "darling 0.24.0",
  "derive_more",
  "fluent-syntax",
  "heck 0.5.0",
@@ -2944,7 +2978,7 @@ dependencies = [
  "quote",
  "serde",
  "strum 0.28.0",
- "syn 2.0.119",
+ "syn 3.0.3",
  "thiserror 2.0.19",
  "toml 1.1.4+spec-1.1.0",
  "unic-langid",
@@ -2953,7 +2987,7 @@ dependencies = [
 [[package]]
 name = "es-fluent-toml"
 version = "0.18.1"
-source = "git+https://github.com/stayhydated/es-fluent#057d06dfa9ec290092bf5b89d250c266f8579165"
+source = "git+https://github.com/stayhydated/es-fluent?rev=be9ccf8d9fc5e417e2605af3b648a6199cb39f8d#be9ccf8d9fc5e417e2605af3b648a6199cb39f8d"
 dependencies = [
  "bon",
  "es-fluent-shared",
@@ -3769,13 +3803,13 @@ dependencies = [
 [[package]]
 name = "gpui"
 version = "0.2.2"
-source = "git+https://github.com/zed-industries/zed#20ce54f8e407d575cc2d873ffa1c09a08c2689f1"
+source = "git+https://github.com/zed-industries/zed#101ca00a1352ed71ef398f21b47836565d1998e3"
 replace = "gpui 0.2.2 (git+https://github.com/zed-industries/zed?rev=20ce54f8e407d575cc2d873ffa1c09a08c2689f1)"
 
 [[package]]
 name = "gpui-component"
 version = "0.5.2"
-source = "git+https://github.com/longbridge/gpui-component#bbf7650abae59e3a984d48bd120a6f9094fed1f2"
+source = "git+https://github.com/longbridge/gpui-component#181cf147d1d68ff33bae60abb58a24917658142e"
 dependencies = [
  "aho-corasick",
  "anyhow",
@@ -3823,7 +3857,7 @@ dependencies = [
 [[package]]
 name = "gpui-component-assets"
 version = "0.5.1"
-source = "git+https://github.com/longbridge/gpui-component#bbf7650abae59e3a984d48bd120a6f9094fed1f2"
+source = "git+https://github.com/longbridge/gpui-component#181cf147d1d68ff33bae60abb58a24917658142e"
 dependencies = [
  "anyhow",
  "gpui 0.2.2 (git+https://github.com/zed-industries/zed)",
@@ -3837,7 +3871,7 @@ dependencies = [
 [[package]]
 name = "gpui-component-macros"
 version = "0.5.1"
-source = "git+https://github.com/longbridge/gpui-component#bbf7650abae59e3a984d48bd120a6f9094fed1f2"
+source = "git+https://github.com/longbridge/gpui-component#181cf147d1d68ff33bae60abb58a24917658142e"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -3987,7 +4021,7 @@ dependencies = [
 [[package]]
 name = "gpui_macros"
 version = "0.1.0"
-source = "git+https://github.com/zed-industries/zed#20ce54f8e407d575cc2d873ffa1c09a08c2689f1"
+source = "git+https://github.com/zed-industries/zed#101ca00a1352ed71ef398f21b47836565d1998e3"
 replace = "gpui_macros 0.1.0 (git+https://github.com/zed-industries/zed?rev=20ce54f8e407d575cc2d873ffa1c09a08c2689f1)"
 
 [[package]]
@@ -6432,9 +6466,9 @@ dependencies = [
 
 [[package]]
 name = "open"
-version = "5.4.0"
+version = "5.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a0b3d059e795d52b8a72fef45658620edd4d9c359b338564aa14391ffa511ed5"
+checksum = "f9cfef937e9c486488c7e3d949ae31c0f1d06bdacd75b99c086cb35356e30408"
 dependencies = [
  "is-wsl",
  "libc",
@@ -8506,7 +8540,7 @@ checksum = "a2eb9349b6444b326872e140eb1cf5e7c522154d69e7a0ffb0fb81c06b37543f"
 [[package]]
 name = "stayhydated-dioxus"
 version = "0.1.0"
-source = "git+https://github.com/stayhydated/shared?rev=3e63926d573ca52c14ad922a7711fc98865bab36#3e63926d573ca52c14ad922a7711fc98865bab36"
+source = "git+https://github.com/stayhydated/shared?rev=2b62be85c86ddfe616fc2081c1aeaa5c00decca6#2b62be85c86ddfe616fc2081c1aeaa5c00decca6"
 dependencies = [
  "bon",
  "dioxus",
@@ -8520,7 +8554,7 @@ dependencies = [
 [[package]]
 name = "stayhydated-dioxus-core"
 version = "0.1.0"
-source = "git+https://github.com/stayhydated/shared?rev=3e63926d573ca52c14ad922a7711fc98865bab36#3e63926d573ca52c14ad922a7711fc98865bab36"
+source = "git+https://github.com/stayhydated/shared?rev=2b62be85c86ddfe616fc2081c1aeaa5c00decca6#2b62be85c86ddfe616fc2081c1aeaa5c00decca6"
 dependencies = [
  "bytemuck",
  "derive_more",
@@ -8537,7 +8571,7 @@ dependencies = [
 [[package]]
 name = "stayhydated-site"
 version = "0.1.0"
-source = "git+https://github.com/stayhydated/shared?rev=3e63926d573ca52c14ad922a7711fc98865bab36#3e63926d573ca52c14ad922a7711fc98865bab36"
+source = "git+https://github.com/stayhydated/shared?rev=2b62be85c86ddfe616fc2081c1aeaa5c00decca6#2b62be85c86ddfe616fc2081c1aeaa5c00decca6"
 dependencies = [
  "derive_more",
  "dioxus",
@@ -8546,7 +8580,7 @@ dependencies = [
 [[package]]
 name = "stayhydated-xtask"
 version = "0.1.0"
-source = "git+https://github.com/stayhydated/shared?rev=3e63926d573ca52c14ad922a7711fc98865bab36#3e63926d573ca52c14ad922a7711fc98865bab36"
+source = "git+https://github.com/stayhydated/shared?rev=2b62be85c86ddfe616fc2081c1aeaa5c00decca6#2b62be85c86ddfe616fc2081c1aeaa5c00decca6"
 dependencies = [
  "anyhow",
  "bon",
@@ -11229,9 +11263,9 @@ checksum = "b9cc00251562a284751c9973bace760d86c0276c471b4be569fe6b068ee97a56"
 
 [[package]]
 name = "xml-rs"
-version = "0.8.28"
+version = "0.8.29"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3ae8337f8a065cfc972643663ea4279e04e7256de865aa66fe25cec5fb912d3f"
+checksum = "e450f9b2ed1dff33c94c12589a87338689467b9c4f5d8a5710bd09a847d2c8a7"
 
 [[package]]
 name = "xml5ever"
@@ -11536,18 +11570,18 @@ checksum = "6df3dc4292935e51816d896edcd52aa30bc297907c26167fec31e2b0c6a32524"
 
 [[package]]
 name = "zerocopy"
-version = "0.8.55"
+version = "0.8.56"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b5a105cd7b140f6eeec8acff2ea38135d3cab283ada58540f629fe51e46696eb"
+checksum = "556764e583adb45a9f8d413c2a147fa7e8d821e48e12b14fd560b607998b75eb"
 dependencies = [
  "zerocopy-derive",
 ]
 
 [[package]]
 name = "zerocopy-derive"
-version = "0.8.55"
+version = "0.8.56"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0fe976fb70c78cd64cccfe3a6fc142244e8a77b70959b30faf9d0ac37ee228eb"
+checksum = "f2ab42fc20575779bd240faa45f94a74256f755c0fa9e89f0ede20d91d0cdfc1"
 dependencies = [
  "proc-macro2",
  "quote",
