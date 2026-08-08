@@ -24,8 +24,8 @@ component = [ "dep:gpui-component", "dep:thiserror" ]
 default = [  ]
 
 [dependencies]
-es-fluent = { git = "https://github.com/stayhydated/es-fluent", rev = "8ff586b958c3e17bfc530b2ddf7b7a5c87b716b9", version = "0.18.1" }
-es-fluent-manager-embedded = { git = "https://github.com/stayhydated/es-fluent", rev = "8ff586b958c3e17bfc530b2ddf7b7a5c87b716b9", version = "0.18.1" }
+es-fluent = { git = "https://github.com/stayhydated/es-fluent", rev = "ec72a62d176770424b02f7cb194cb167a16aeb0e", version = "0.18.1" }
+es-fluent-manager-embedded = { git = "https://github.com/stayhydated/es-fluent", rev = "ec72a62d176770424b02f7cb194cb167a16aeb0e", version = "0.18.1" }
 gpui = { git = "https://github.com/zed-industries/zed", rev = "20ce54f8e407d575cc2d873ffa1c09a08c2689f1" }
 gpui-component = { git = "https://github.com/longbridge/gpui-component", optional = true }
 strum = "0.28"
