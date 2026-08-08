@@ -8,4 +8,9 @@ runs:
       shell: bash
       run: |
         sudo apt-get update
-        sudo apt-get install --no-install-recommends libfontconfig1-dev pkg-config
+        sudo apt-get install --no-install-recommends \
+          libfontconfig1-dev \
+          libxcb1-dev \
+          libxkbcommon-dev \
+          libxkbcommon-x11-dev \
+          pkg-config
