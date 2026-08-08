@@ -1,0 +1,11 @@
+name: Install Linux dependencies
+description: Installs the system libraries required by GPUI on Linux.
+
+runs:
+  using: composite
+  steps:
+    - name: Install Linux dependencies
+      shell: bash
+      run: |
+        sudo apt-get update
+        sudo apt-get install --no-install-recommends libfontconfig1-dev pkg-config

@@ -31,9 +31,21 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
 
       - name: Setup sccache
+        if: runner.os != 'Windows'
         uses: mozilla-actions/sccache-action@v0.0.11
 
+      - name: Install Linux dependencies
+        if: runner.os == 'Linux'
+        uses: ./.github/actions/install-linux-deps
+
       - name: Run tests
+        if: runner.os != 'Windows'
+        run: cargo test --workspace --all-features --all-targets --locked
+
+      - name: Run tests
+        if: runner.os == 'Windows'
+        env:
+          RUSTC_WRAPPER: ""
         run: cargo test --workspace --all-features --all-targets --locked
 
   fmt:
@@ -62,6 +74,9 @@ jobs:
       - name: Setup sccache
         uses: mozilla-actions/sccache-action@v0.0.11
 
+      - name: Install Linux dependencies
+        uses: ./.github/actions/install-linux-deps
+
       - name: Lint code
         run: cargo clippy --workspace --all-features --all-targets --locked -- -D warnings
 
@@ -75,6 +90,9 @@ jobs:
 
       - name: Setup sccache
         uses: mozilla-actions/sccache-action@v0.0.11
+
+      - name: Install Linux dependencies
+        uses: ./.github/actions/install-linux-deps
 
       - name: Build documentation
         run: cargo doc --workspace --all-features --no-deps --locked
@@ -112,6 +130,9 @@ jobs:
 
       - name: Setup sccache
         uses: mozilla-actions/sccache-action@v0.0.11
+
+      - name: Install Linux dependencies
+        uses: ./.github/actions/install-linux-deps
 
       - uses: cargo-bins/cargo-binstall@main
 
