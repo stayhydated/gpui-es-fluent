@@ -12,11 +12,11 @@ name = "demo"
 path = "src/main.rs"
 
 [dependencies]
-es-fluent = { git = "https://github.com/stayhydated/es-fluent", rev = "1b65a06860da8a08282220b92d69ad30ae6664f1", version = "0.18.1" }
-es-fluent-manager-embedded = { git = "https://github.com/stayhydated/es-fluent", rev = "1b65a06860da8a08282220b92d69ad30ae6664f1", version = "0.18.1" }
+es-fluent = { git = "https://github.com/stayhydated/es-fluent", rev = "69aeaa62c03b23317be13d0ce0661f3160d62db7", version = "0.18.1" }
+es-fluent-manager-embedded = { git = "https://github.com/stayhydated/es-fluent", rev = "69aeaa62c03b23317be13d0ce0661f3160d62db7", version = "0.18.1" }
 gpui = { branch = "linux-headless-renderer", git = "https://github.com/stayhydated/zed" }
-gpui-component = { git = "https://github.com/stayhydated/gpui-component", rev = "fc7ea7a1a56daa54cfe48b0bcb688493eaff198b" }
-gpui-component-assets = { git = "https://github.com/stayhydated/gpui-component", rev = "fc7ea7a1a56daa54cfe48b0bcb688493eaff198b" }
+gpui-component = { git = "https://github.com/stayhydated/gpui-component", rev = "33f25d368447a47ab5da2c674b2e833826c79fb1" }
+gpui-component-assets = { git = "https://github.com/stayhydated/gpui-component", rev = "33f25d368447a47ab5da2c674b2e833826c79fb1" }
 gpui-es-fluent = { features = [ "component" ], path = "../.." }
 gpui_platform = { features = [
   "font-kit",
@@ -30,7 +30,7 @@ wasm-bindgen = "0.2"
 crate-type = [ "cdylib", "rlib" ]
 
 [build-dependencies]
-es-fluent-build = { git = "https://github.com/stayhydated/es-fluent", rev = "1b65a06860da8a08282220b92d69ad30ae6664f1", version = "0.18.1" }
+es-fluent-build = { git = "https://github.com/stayhydated/es-fluent", rev = "69aeaa62c03b23317be13d0ce0661f3160d62db7", version = "0.18.1" }
 
 [lints.rust]
 future_incompatible = "deny"
