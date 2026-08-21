@@ -1,7 +1,7 @@
 [package]
 name = "gpui-es-fluent-demo"
 version = "0.1.0"
-rust-version = "1.96"
+rust-version = "1.98"
 edition = "2024"
 license = "Unlicense"
 publish = false
@@ -12,25 +12,25 @@ name = "demo"
 path = "src/main.rs"
 
 [dependencies]
-es-fluent = { git = "https://github.com/stayhydated/es-fluent", rev = "be9ccf8d9fc5e417e2605af3b648a6199cb39f8d", version = "0.18.1" }
-es-fluent-manager-embedded = { git = "https://github.com/stayhydated/es-fluent", rev = "be9ccf8d9fc5e417e2605af3b648a6199cb39f8d", version = "0.18.1" }
-gpui = { git = "https://github.com/zed-industries/zed", rev = "20ce54f8e407d575cc2d873ffa1c09a08c2689f1" }
-gpui-component = { git = "https://github.com/longbridge/gpui-component" }
-gpui-component-assets = { git = "https://github.com/longbridge/gpui-component" }
+es-fluent = { git = "https://github.com/stayhydated/es-fluent", rev = "1b65a06860da8a08282220b92d69ad30ae6664f1", version = "0.18.1" }
+es-fluent-manager-embedded = { git = "https://github.com/stayhydated/es-fluent", rev = "1b65a06860da8a08282220b92d69ad30ae6664f1", version = "0.18.1" }
+gpui = { branch = "linux-headless-renderer", git = "https://github.com/stayhydated/zed" }
+gpui-component = { git = "https://github.com/stayhydated/gpui-component", rev = "fc7ea7a1a56daa54cfe48b0bcb688493eaff198b" }
+gpui-component-assets = { git = "https://github.com/stayhydated/gpui-component", rev = "fc7ea7a1a56daa54cfe48b0bcb688493eaff198b" }
 gpui-es-fluent = { features = [ "component" ], path = "../.." }
 gpui_platform = { features = [
   "font-kit",
   "runtime_shaders",
   "wayland",
   "x11",
-], git = "https://github.com/zed-industries/zed", rev = "20ce54f8e407d575cc2d873ffa1c09a08c2689f1" }
+], branch = "linux-headless-renderer", git = "https://github.com/stayhydated/zed" }
 wasm-bindgen = "0.2"
 
 [lib]
 crate-type = [ "cdylib", "rlib" ]
 
 [build-dependencies]
-es-fluent-build = { git = "https://github.com/stayhydated/es-fluent", rev = "be9ccf8d9fc5e417e2605af3b648a6199cb39f8d", version = "0.18.1" }
+es-fluent-build = { git = "https://github.com/stayhydated/es-fluent", rev = "1b65a06860da8a08282220b92d69ad30ae6664f1", version = "0.18.1" }
 
 [lints.rust]
 future_incompatible = "deny"
