@@ -15,15 +15,15 @@ path = "src/main.rs"
 es-fluent = { git = "https://github.com/stayhydated/es-fluent", rev = "69aeaa62c03b23317be13d0ce0661f3160d62db7", version = "0.18.1" }
 es-fluent-manager-embedded = { git = "https://github.com/stayhydated/es-fluent", rev = "69aeaa62c03b23317be13d0ce0661f3160d62db7", version = "0.18.1" }
 gpui = { branch = "linux-headless-renderer", git = "https://github.com/stayhydated/zed" }
-gpui-component = { git = "https://github.com/stayhydated/gpui-component", rev = "33f25d368447a47ab5da2c674b2e833826c79fb1" }
-gpui-component-assets = { git = "https://github.com/stayhydated/gpui-component", rev = "33f25d368447a47ab5da2c674b2e833826c79fb1" }
+gpui-component = { git = "https://github.com/stayhydated/gpui-component", rev = "cdba027283fec36e37fb4b90dea862b1e116aa2d" }
+gpui-component-assets = { git = "https://github.com/stayhydated/gpui-component", rev = "cdba027283fec36e37fb4b90dea862b1e116aa2d" }
 gpui-es-fluent = { features = [ "component" ], path = "../.." }
-gpui_platform = { features = [
+gpui_platform = { branch = "linux-headless-renderer", features = [
   "font-kit",
   "runtime_shaders",
   "wayland",
   "x11",
-], branch = "linux-headless-renderer", git = "https://github.com/stayhydated/zed" }
+], git = "https://github.com/stayhydated/zed" }
 wasm-bindgen = "0.2"
 
 [lib]

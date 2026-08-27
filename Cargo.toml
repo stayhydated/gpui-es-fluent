@@ -27,15 +27,15 @@ default = [  ]
 es-fluent = { git = "https://github.com/stayhydated/es-fluent", rev = "69aeaa62c03b23317be13d0ce0661f3160d62db7", version = "0.18.1" }
 es-fluent-manager-embedded = { git = "https://github.com/stayhydated/es-fluent", rev = "69aeaa62c03b23317be13d0ce0661f3160d62db7", version = "0.18.1" }
 gpui = { branch = "linux-headless-renderer", git = "https://github.com/stayhydated/zed" }
-gpui-component = { git = "https://github.com/stayhydated/gpui-component", optional = true, rev = "33f25d368447a47ab5da2c674b2e833826c79fb1" }
+gpui-component = { git = "https://github.com/stayhydated/gpui-component", optional = true, rev = "cdba027283fec36e37fb4b90dea862b1e116aa2d" }
 strum = "0.28"
 thiserror = { optional = true, version = "2.0" }
 unic-langid = { features = [ "serde" ], version = "0.9" }
 
 [dev-dependencies]
-gpui = { features = [
+gpui = { branch = "linux-headless-renderer", features = [
   "test-support",
-], branch = "linux-headless-renderer", git = "https://github.com/stayhydated/zed" }
+], git = "https://github.com/stayhydated/zed" }
 
 [profile.dev]
 codegen-units = 16
