@@ -24,8 +24,8 @@ component = [ "dep:gpui-component", "dep:thiserror" ]
 default = [  ]
 
 [dependencies]
-es-fluent = { git = "https://github.com/stayhydated/es-fluent", rev = "69aeaa62c03b23317be13d0ce0661f3160d62db7", version = "0.18.1" }
-es-fluent-manager-embedded = { git = "https://github.com/stayhydated/es-fluent", rev = "69aeaa62c03b23317be13d0ce0661f3160d62db7", version = "0.18.1" }
+es-fluent = { git = "https://github.com/stayhydated/es-fluent", rev = "4b900ddaebdc6d4335a6bcb15a610277b1b193f8", version = "0.18.1" }
+es-fluent-manager-embedded = { git = "https://github.com/stayhydated/es-fluent", rev = "4b900ddaebdc6d4335a6bcb15a610277b1b193f8", version = "0.18.1" }
 gpui = { branch = "linux-headless-renderer", git = "https://github.com/stayhydated/zed" }
 gpui-component = { git = "https://github.com/stayhydated/gpui-component", optional = true, rev = "cdba027283fec36e37fb4b90dea862b1e116aa2d" }
 strum = "0.28"
