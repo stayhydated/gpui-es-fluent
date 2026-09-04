@@ -1,0 +1,11 @@
+name: Install Linux dependencies
+description: Install native packages required to build and test the workspace on Linux.
+
+runs:
+  using: composite
+  steps:
+    - name: Install packages
+      shell: bash
+      run: |
+        sudo apt-get update
+        sudo apt-get install --yes libfontconfig1-dev

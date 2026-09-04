@@ -12,8 +12,8 @@ name = "demo"
 path = "src/main.rs"
 
 [dependencies]
-es-fluent = { git = "https://github.com/stayhydated/es-fluent", rev = "4b900ddaebdc6d4335a6bcb15a610277b1b193f8", version = "0.18.1" }
-es-fluent-manager-embedded = { git = "https://github.com/stayhydated/es-fluent", rev = "4b900ddaebdc6d4335a6bcb15a610277b1b193f8", version = "0.18.1" }
+es-fluent = { git = "https://github.com/stayhydated/es-fluent", rev = "94efb551ede72c9e7da4bbdf97d5eecb5ea09982", version = "0.18.1" }
+es-fluent-manager-embedded = { git = "https://github.com/stayhydated/es-fluent", rev = "94efb551ede72c9e7da4bbdf97d5eecb5ea09982", version = "0.18.1" }
 gpui = { branch = "linux-headless-renderer", git = "https://github.com/stayhydated/zed" }
 gpui-component = { git = "https://github.com/stayhydated/gpui-component", rev = "cdba027283fec36e37fb4b90dea862b1e116aa2d" }
 gpui-component-assets = { git = "https://github.com/stayhydated/gpui-component", rev = "cdba027283fec36e37fb4b90dea862b1e116aa2d" }
@@ -30,7 +30,7 @@ wasm-bindgen = "0.2"
 crate-type = [ "cdylib", "rlib" ]
 
 [build-dependencies]
-es-fluent-build = { git = "https://github.com/stayhydated/es-fluent", rev = "4b900ddaebdc6d4335a6bcb15a610277b1b193f8", version = "0.18.1" }
+es-fluent-build = { git = "https://github.com/stayhydated/es-fluent", rev = "94efb551ede72c9e7da4bbdf97d5eecb5ea09982", version = "0.18.1" }
 
 [lints.rust]
 future_incompatible = "deny"
