@@ -11,14 +11,15 @@ use wasm_bindgen::prelude::*;
 const DEMO_MARKER: &str = "gpui-es-fluent-demo";
 #[cfg(not(target_family = "wasm"))]
 fn main() {
-    run_with_app(gpui_kit::application().with_assets(gpui_kit::assets::Assets));
+    run_with_app(gpui_kit::application().with_assets(gpui_kit::assets::Assets::new("")));
 }
 
 #[cfg(target_family = "wasm")]
 #[wasm_bindgen]
 pub fn run() -> Result<(), JsValue> {
     gpui_kit::platform::web_init();
-    let app = gpui_kit::platform::single_threaded_web().with_assets(gpui_kit::assets::Assets);
+    let app =
+        gpui_kit::platform::single_threaded_web().with_assets(gpui_kit::assets::Assets::new(""));
 
     struct WasmApplication(std::rc::Rc<gpui_kit::AppCell>);
 
