@@ -29,7 +29,7 @@ Its priorities are:
 1. **Public API clarity**: keep the `I18n` global, language helpers,
    hard-failing localization, fallible `try_*` lookups, and locale functions
    easy to use from GPUI applications.
-2. **Feature fit**: keep `gpui-component` integration behind the `component`
+2. **Feature fit**: keep GPUI Kit component integration behind the `component`
    feature.
 
 ## Quick Decision Flow
@@ -66,7 +66,7 @@ they describe.
   `src/lib.rs`, item-level rustdocs, the affected README usage text, and
   matching book chapters and applicable public usage skill guidance in the same
   change.
-- When `gpui-component` locale integration changes, keep the `component`
+- When GPUI Kit component locale integration changes, keep the `component`
   feature, public API, README, `book/src/component.md`, and GPUI demo aligned.
 - When the public catalog or its destinations change, update `web/src/lib.rs`.
 - Treat `.es-fluent/` as an ignored `es-fluent` CLI scratch directory, not as
@@ -83,14 +83,14 @@ they describe.
   Audience: **User-facing**
   Role: single public crate for GPUI app-global `I18n`, typed language bounds,
   locale selection helpers, strict localization, and optional
-  `gpui-component` locale integration.
+  GPUI Kit component locale integration.
 
 ### Documentation, Demo, and Publishing
 
 - `book/src`
   Audience: **User-facing**
   Role: mdBook source for setup, global state, locale changes, and
-  `gpui-component` synchronization.
+  GPUI Kit component synchronization.
 
 - `examples/gpui-demo`
   Audience: **User-facing**

@@ -1,7 +1,7 @@
 # The GPUI global
 
 `I18n` wraps `es_fluent_manager_embedded::EmbeddedI18n` and implements
-`gpui::Global`, making one localization manager available throughout the
+`gpui_kit::Global`, making one localization manager available throughout the
 application.
 
 ## Install the global

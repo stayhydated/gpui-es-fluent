@@ -10,13 +10,13 @@ Start with:
 - Rust 1.96 or newer,
 - an existing GPUI application,
 - the `cargo es-fluent` command, and
-- the current Git dependencies:
+- the published GPUI Kit facade:
 
 ```toml
 [dependencies]
 es-fluent = { git = "https://github.com/stayhydated/es-fluent" }
 es-fluent-manager-embedded = { git = "https://github.com/stayhydated/es-fluent" }
-gpui = { git = "https://github.com/zed-industries/zed", rev = "1a246efd7e1b83ab568ec5e3e6c1a43a42e1abba" }
+gpui-kit = "0.6.0"
 gpui-es-fluent = { git = "https://github.com/stayhydated/gpui-es-fluent" }
 unic-langid = "0.9"
 
@@ -24,9 +24,8 @@ unic-langid = "0.9"
 es-fluent-build = { git = "https://github.com/stayhydated/es-fluent" }
 ```
 
-Keep the shared `es-fluent` and GPUI dependencies on these sources. Cargo treats
-registry and Git builds as distinct crate identities, even when their version
-numbers match.
+Use GPUI through `gpui-kit`; it pins and re-exports the matching published GPUI
+crate family.
 
 ## 1. Configure the locale assets
 
@@ -126,7 +125,7 @@ assert!(
 - **The global exists but a hard-failing lookup still panics:** select a
   supported locale with `init_with_language` or `change_locale`, then check
   that the generated FTL contains the message.
-- **A message trait bound or `gpui::App` type does not match:** run
+- **A message trait bound or `gpui_kit::App` type does not match:** run
   `cargo tree -d` from the application root and align duplicate `es-fluent` or
   GPUI packages with the dependency sources above.
 - **`cargo es-fluent` cannot find the derived type:** keep the type and

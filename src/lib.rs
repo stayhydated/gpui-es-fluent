@@ -1,7 +1,7 @@
 #![doc = include_str!("../README.md")]
 
 use es_fluent::{FluentLabel, FluentLocalizerExt as _, FluentMessage};
-use gpui::App;
+use gpui_kit::App;
 use std::borrow::Borrow;
 use strum::IntoEnumIterator;
 use unic_langid::LanguageIdentifier;
@@ -91,7 +91,7 @@ impl I18n {
     }
 }
 
-impl gpui::Global for I18n {}
+impl gpui_kit::Global for I18n {}
 
 /// Bounds used by generated language enums that can be stored in GPUI globals.
 pub trait Language:
@@ -128,7 +128,7 @@ impl<T> Language for T where
 #[derive(Clone, Copy)]
 pub struct CurrentLanguage<L: Language>(pub L);
 
-impl<L: Language> gpui::Global for CurrentLanguage<L> {}
+impl<L: Language> gpui_kit::Global for CurrentLanguage<L> {}
 
 /// Installs an [`I18n`] global if one is not already present.
 ///
@@ -250,11 +250,11 @@ where
 }
 
 #[cfg(feature = "component")]
-/// Errors produced while synchronizing `gpui-component` locale state.
+/// Errors produced while synchronizing GPUI Kit component locale state.
 #[derive(Debug, thiserror::Error)]
 pub enum ComponentLocaleError {
     /// The component locale is not a valid Unicode language identifier.
-    #[error("invalid gpui-component locale `{locale}`")]
+    #[error("invalid GPUI Kit component locale `{locale}`")]
     InvalidLocale {
         /// The rejected locale string.
         locale: String,
@@ -266,26 +266,26 @@ pub enum ComponentLocaleError {
     #[error("failed to initialize gpui-es-fluent localization")]
     Initialization(#[from] EmbeddedInitError),
     /// The installed localization manager rejected the selected language.
-    #[error("failed to select gpui-component locale")]
+    #[error("failed to select GPUI Kit component locale")]
     Selection(#[from] LocalizationError),
 }
 
 #[cfg(feature = "component")]
-/// Reads the current `gpui-component` locale as a language identifier.
+/// Reads the current GPUI Kit component locale as a language identifier.
 ///
 /// # Errors
 ///
-/// Returns [`ComponentLocaleError::InvalidLocale`] when `gpui-component`
+/// Returns [`ComponentLocaleError::InvalidLocale`] when GPUI Kit
 /// contains an invalid language identifier.
 pub fn component_language() -> Result<LanguageIdentifier, ComponentLocaleError> {
-    let locale = gpui_component::locale().to_string();
+    let locale = gpui_kit::component::locale().to_string();
     locale
         .parse::<LanguageIdentifier>()
         .map_err(|source| ComponentLocaleError::InvalidLocale { locale, source })
 }
 
 #[cfg(feature = "component")]
-/// Initializes [`I18n`] from the current `gpui-component` locale.
+/// Initializes [`I18n`] from the current GPUI Kit component locale.
 ///
 /// # Errors
 ///
@@ -297,7 +297,7 @@ pub fn init_from_component_locale(cx: &mut App) -> Result<(), ComponentLocaleErr
 }
 
 #[cfg(feature = "component")]
-/// Sets `gpui-component`'s locale and replaces the [`I18n`] global to match it.
+/// Sets GPUI Kit's component locale and replaces the [`I18n`] global to match it.
 ///
 /// # Errors
 ///
@@ -315,13 +315,13 @@ pub fn set_component_locale(
         }
     })?;
 
-    gpui_component::set_locale(&language.to_string());
+    gpui_kit::component::set_locale(&language.to_string());
     replace_with_language(cx, language.clone())?;
     Ok(language)
 }
 
 #[cfg(feature = "component")]
-/// Syncs the installed [`I18n`] global from the current `gpui-component` locale.
+/// Syncs the installed [`I18n`] global from the current GPUI Kit component locale.
 ///
 /// The parsed language is returned even when no [`I18n`] global is installed.
 ///
@@ -458,8 +458,8 @@ mod tests {
         value.parse().unwrap()
     }
 
-    fn with_test_app(test: impl FnOnce(&mut gpui::TestAppContext)) {
-        let mut cx = gpui::TestAppContext::single();
+    fn with_test_app(test: impl FnOnce(&mut gpui_kit::TestAppContext)) {
+        let mut cx = gpui_kit::TestAppContext::single();
         test(&mut cx);
         cx.quit();
     }
@@ -578,15 +578,15 @@ mod tests {
     fn component_language_parses_component_locale_and_rejects_invalid_state() {
         let _guard = component_locale_lock();
 
-        gpui_component::set_locale("fr");
+        gpui_kit::component::set_locale("fr");
         assert_eq!(component_language().unwrap(), language("fr"));
 
-        gpui_component::set_locale("not a locale");
+        gpui_kit::component::set_locale("not a locale");
         assert!(matches!(
             component_language(),
             Err(ComponentLocaleError::InvalidLocale { locale, .. }) if locale == "not a locale"
         ));
-        gpui_component::set_locale("en-US");
+        gpui_kit::component::set_locale("en-US");
     }
 
     #[cfg(feature = "component")]
@@ -594,7 +594,7 @@ mod tests {
     fn init_from_component_locale_uses_current_component_locale() {
         let _guard = component_locale_lock();
         force_inventory_link();
-        gpui_component::set_locale("en-US");
+        gpui_kit::component::set_locale("en-US");
 
         with_test_app(|cx| {
             cx.update(|cx| {
@@ -613,7 +613,7 @@ mod tests {
         with_test_app(|cx| {
             cx.update(|cx| {
                 assert_eq!(set_component_locale(cx, "fr").unwrap(), language("fr"));
-                assert_eq!(&*gpui_component::locale(), "fr");
+                assert_eq!(&*gpui_kit::component::locale(), "fr");
                 assert_eq!(localize_message(&*cx, &TestMessage), "Bonjour du test");
 
                 assert!(matches!(
@@ -621,7 +621,7 @@ mod tests {
                     Err(ComponentLocaleError::InvalidLocale { locale, .. })
                         if locale == "not a locale"
                 ));
-                assert_eq!(&*gpui_component::locale(), "fr");
+                assert_eq!(&*gpui_kit::component::locale(), "fr");
             })
         });
     }
@@ -635,7 +635,7 @@ mod tests {
         with_test_app(|cx| {
             cx.update(|cx| {
                 init_with_language(cx, language("en-US")).unwrap();
-                gpui_component::set_locale("fr");
+                gpui_kit::component::set_locale("fr");
 
                 assert_eq!(sync_component_locale(&*cx).unwrap(), language("fr"));
                 assert_eq!(localize_message(&*cx, &TestMessage), "Bonjour du test");
@@ -647,7 +647,7 @@ mod tests {
     #[test]
     fn sync_component_locale_returns_language_without_i18n_global() {
         let _guard = component_locale_lock();
-        gpui_component::set_locale("fr");
+        gpui_kit::component::set_locale("fr");
 
         with_test_app(|cx| {
             cx.update(|cx| {

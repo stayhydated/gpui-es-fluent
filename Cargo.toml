@@ -20,22 +20,21 @@ stayhydated-site = { git = "https://github.com/stayhydated/shared", rev = "80994
 stayhydated-xtask = { git = "https://github.com/stayhydated/shared", rev = "809946144fe13b04a57ba17677c4c699143f4786" }
 
 [features]
-component = [ "dep:gpui-component", "dep:thiserror" ]
+component = [ "gpui-kit/component", "dep:thiserror" ]
 default = [  ]
 
 [dependencies]
 es-fluent = { git = "https://github.com/stayhydated/es-fluent", rev = "94efb551ede72c9e7da4bbdf97d5eecb5ea09982", version = "0.18.1" }
 es-fluent-manager-embedded = { git = "https://github.com/stayhydated/es-fluent", rev = "94efb551ede72c9e7da4bbdf97d5eecb5ea09982", version = "0.18.1" }
-gpui = { branch = "linux-headless-renderer", git = "https://github.com/stayhydated/zed" }
-gpui-component = { git = "https://github.com/stayhydated/gpui-component", optional = true, rev = "cdba027283fec36e37fb4b90dea862b1e116aa2d" }
+gpui-kit = { default-features = false, version = "0.6.0" }
 strum = "0.28"
 thiserror = { optional = true, version = "2.0" }
 unic-langid = { features = [ "serde" ], version = "0.9" }
 
 [dev-dependencies]
-gpui = { branch = "linux-headless-renderer", features = [
+gpui-kit = { default-features = false, features = [
   "test-support",
-], git = "https://github.com/stayhydated/zed" }
+], version = "0.6.0" }
 
 [profile.dev]
 codegen-units = 16

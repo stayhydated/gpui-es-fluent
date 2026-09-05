@@ -1,28 +1,23 @@
-# gpui-component integration
+# GPUI Kit component integration
 
-Enable the `component` feature to keep `gpui-component` locale state and the
+Enable the `component` feature to keep GPUI Kit component locale state and the
 embedded `I18n` global aligned:
 
 ```toml
 [dependencies]
-gpui-component = { git = "https://github.com/longbridge/gpui-component" }
+gpui-kit = "0.6.0"
 gpui-es-fluent = { git = "https://github.com/stayhydated/gpui-es-fluent", features = ["component"] }
-
-[replace]
-"https://github.com/zed-industries/zed#gpui@0.2.2" = { git = "https://github.com/zed-industries/zed", rev = "1a246efd7e1b83ab568ec5e3e6c1a43a42e1abba" }
-"https://github.com/zed-industries/zed#gpui_macros@0.1.0" = { git = "https://github.com/zed-industries/zed", rev = "1a246efd7e1b83ab568ec5e3e6c1a43a42e1abba" }
 ```
 
-Use the direct `gpui-component` dependency shown above so the application and
-`gpui-es-fluent` share one component locale. The replacement entries align
-`gpui-component` with the GPUI revision used in [Getting started](getting_started.md).
+Use the published `gpui-kit` facade so the application and `gpui-es-fluent`
+share one component locale and one GPUI crate identity.
 
-Initialize `gpui-component` first during application setup, set its startup
+Initialize GPUI Kit first during application setup, set its startup
 locale, and install `I18n` before opening windows:
 
 ```rust,ignore
-gpui_component::init(cx);
-gpui_component::set_locale("en-US");
+gpui_kit::init(cx);
+gpui_kit::component::set_locale("en-US");
 gpui_es_fluent::init_from_component_locale(cx)?;
 ```
 
@@ -49,7 +44,7 @@ When another part of the application changes the component locale, apply it to
 an installed embedded manager:
 
 ```rust,ignore
-gpui_component::set_locale("fr-FR");
+gpui_kit::component::set_locale("fr-FR");
 let language = gpui_es_fluent::sync_component_locale(cx)?;
 cx.notify();
 ```

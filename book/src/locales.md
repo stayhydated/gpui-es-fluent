@@ -61,7 +61,7 @@ cx.notify();
 ```
 
 GPUI globals do not automatically rerender entities. Call `cx.notify()` on the
-owning `gpui::Context<T>` after a successful change, as shown above.
+owning `gpui_kit::Context<T>` after a successful change, as shown above.
 
 ## Track a typed language choice
 

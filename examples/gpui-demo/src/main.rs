@@ -1,38 +1,26 @@
-#[cfg(target_family = "wasm")]
-use std::borrow::Cow;
-
-use gpui::prelude::*;
-use gpui::{App, Application, Bounds, Context, Window, WindowBounds, WindowOptions, div, px, size};
-use gpui_component::button::Button;
-use gpui_component::theme::{Theme, ThemeMode};
 use gpui_es_fluent_demo::DemoMessages;
+use gpui_kit::component::button::Button;
+use gpui_kit::component::theme::{Theme, ThemeMode};
+use gpui_kit::prelude::*;
+use gpui_kit::{
+    App, Application, Bounds, Context, Window, WindowBounds, WindowOptions, div, px, size,
+};
 #[cfg(target_family = "wasm")]
 use wasm_bindgen::prelude::*;
 
 const DEMO_MARKER: &str = "gpui-es-fluent-demo";
-#[cfg(target_family = "wasm")]
-const UI_FONT_FAMILY: &str = "Noto Sans SC";
-#[cfg(target_family = "wasm")]
-const MONO_FONT_FAMILY: &str = "JetBrains Mono";
-
 #[cfg(not(target_family = "wasm"))]
 fn main() {
-    run_with_app(
-        gpui_platform::application().with_assets(gpui_component_assets::Assets::new(
-            "https://longbridge.github.io/gpui-component/gallery",
-        )),
-    );
+    run_with_app(gpui_kit::application().with_assets(gpui_kit::assets::Assets));
 }
 
 #[cfg(target_family = "wasm")]
 #[wasm_bindgen]
 pub fn run() -> Result<(), JsValue> {
-    gpui_platform::web_init();
-    let app = gpui_platform::single_threaded_web().with_assets(gpui_component_assets::Assets::new(
-        "https://longbridge.github.io/gpui-component/gallery",
-    ));
+    gpui_kit::platform::web_init();
+    let app = gpui_kit::platform::single_threaded_web().with_assets(gpui_kit::assets::Assets);
 
-    struct WasmApplication(std::rc::Rc<gpui::AppCell>);
+    struct WasmApplication(std::rc::Rc<gpui_kit::AppCell>);
 
     // Keep GPUI's application cell alive while browser callbacks remain queued.
     let app = unsafe {
@@ -52,8 +40,7 @@ fn main() {
 
 fn run_with_app(app: Application) {
     app.run(|cx: &mut App| {
-        gpui_component::init(cx);
-        install_web_fonts(cx);
+        gpui_kit::init(cx);
         apply_oled_theme(cx);
         gpui_es_fluent_demo::i18n::link();
         gpui_es_fluent::set_component_locale(cx, "en")
@@ -72,54 +59,11 @@ fn run_with_app(app: Application) {
     });
 }
 
-fn install_web_fonts(cx: &mut App) {
-    #[cfg(target_family = "wasm")]
-    {
-        let fonts = vec![
-            Cow::Borrowed(
-                include_bytes!(concat!(
-                    env!("GPUI_COMPONENT_STORY_FONTS_DIR"),
-                    "/NotoSansSC-Regular-subset.ttf"
-                ))
-                .as_slice(),
-            ),
-            Cow::Borrowed(
-                include_bytes!(concat!(
-                    env!("GPUI_COMPONENT_STORY_FONTS_DIR"),
-                    "/NotoEmoji-Regular.ttf"
-                ))
-                .as_slice(),
-            ),
-            Cow::Borrowed(
-                include_bytes!(concat!(
-                    env!("GPUI_COMPONENT_STORY_FONTS_DIR"),
-                    "/JetBrainsMono-Regular.ttf"
-                ))
-                .as_slice(),
-            ),
-        ];
-        cx.text_system()
-            .add_fonts(fonts)
-            .expect("gpui-component web fonts should load");
-        apply_font_families(cx);
-    }
-
-    #[cfg(not(target_family = "wasm"))]
-    let _ = cx;
-}
-
-#[cfg(target_family = "wasm")]
-fn apply_font_families(cx: &mut App) {
-    let theme = Theme::global_mut(cx);
-    theme.font_family = UI_FONT_FAMILY.into();
-    theme.mono_font_family = MONO_FONT_FAMILY.into();
-}
-
 fn apply_oled_theme(cx: &mut App) {
-    let black = gpui::rgb(0x000000).into();
-    let white = gpui::rgb(0xffffff).into();
-    let button_hover = gpui::rgb(0xe5e5e5).into();
-    let button_active = gpui::rgb(0xcccccc).into();
+    let black = gpui_kit::rgb(0x000000).into();
+    let white = gpui_kit::rgb(0xffffff).into();
+    let button_hover = gpui_kit::rgb(0xe5e5e5).into();
+    let button_active = gpui_kit::rgb(0xcccccc).into();
     let theme = Theme::global_mut(cx);
 
     theme.mode = ThemeMode::Dark;
@@ -168,13 +112,13 @@ impl Render for LocaleDemo {
             .items_center()
             .justify_center()
             .gap_5()
-            .bg(gpui::rgb(0x000000))
-            .text_color(gpui::rgb(0xffffff))
+            .bg(gpui_kit::rgb(0x000000))
+            .text_color(gpui_kit::rgb(0xffffff))
             .child(div().text_xs().child(DEMO_MARKER))
             .child(
                 div()
                     .text_3xl()
-                    .font_weight(gpui::FontWeight::BOLD)
+                    .font_weight(gpui_kit::FontWeight::BOLD)
                     .child(heading),
             )
             .child(div().max_w(px(560.)).text_center().child(body))

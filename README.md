@@ -5,7 +5,7 @@
 [![Crates.io](https://img.shields.io/crates/v/gpui-es-fluent.svg)](https://crates.io/crates/gpui-es-fluent)
 
 Store an embedded `es-fluent` manager in GPUI global state, then localize typed
-messages and labels from any context that borrows `gpui::App`.
+messages and labels from any context that borrows `gpui_kit::App`.
 
 ## Install
 
@@ -16,8 +16,8 @@ messages and labels from any context that borrows `gpui::App`.
 gpui-es-fluent = "0.1"
 ```
 
-Enable the `component` feature when the application also uses
-`gpui-component` locale state:
+Enable the `component` feature when the application also uses GPUI Kit's
+component locale state:
 
 ```toml
 [dependencies]
