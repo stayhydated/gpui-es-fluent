@@ -95,21 +95,24 @@ jobs:
       - name: Build documentation
         run: cargo doc --workspace --all-features --no-deps --locked
 
-  # package:
-  #   runs-on: ubuntu-latest
+  package:
+    runs-on: ubuntu-latest
 
-  #   steps:
-  #     - uses: actions/checkout@v7
+    steps:
+      - uses: actions/checkout@v7
 
-  #     - uses: dtolnay/rust-toolchain@stable
+      - uses: dtolnay/rust-toolchain@stable
 
-  #     - name: Setup sccache
-  #       uses: mozilla-actions/sccache-action@v0.0.11
-  #       with:
-  #         version: "v0.16.0"
+      - name: Install Linux dependencies
+        uses: ./.github/actions/install-linux-deps
 
-  #     - name: Check crates.io package
-  #       run: cargo publish --dry-run --locked
+      - name: Setup sccache
+        uses: mozilla-actions/sccache-action@v0.0.11
+        with:
+          version: "v0.16.0"
+
+      - name: Check crates.io package
+        run: cargo publish --dry-run --locked
 
   machete:
     runs-on: ubuntu-latest
@@ -163,7 +166,7 @@ jobs:
   release:
     name: release
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-    needs: [test, fmt, clippy, docs, machete, rust-coverage]
+    needs: [test, fmt, clippy, docs, package, machete, rust-coverage]
     runs-on: ubuntu-latest
     environment: release
     permissions:
