@@ -122,8 +122,9 @@ they describe.
   changes, `cargo xtask build gpui-demo` for the nightly Wasm demo, and
   `cargo xtask build web` for the catalog. `just web-build` runs the complete
   publication pipeline.
-- CI runs locked workspace-form tests, formatting, clippy, docs,
-  cargo-machete, coverage, and Codecov publishing from `.github/workflows/ci.yml`.
+- CI runs locked workspace-form tests, formatting, clippy, docs, a package
+  dry-run, cargo-machete, coverage, and Codecov publishing from
+  `.github/workflows/ci.yml`.
 - If validation cannot be run, state why and what remains unvalidated.
 - Do not claim a change works unless it was validated or the remaining risk is
   explicitly documented.
