@@ -70,7 +70,7 @@ supported-language enum that meets the `CurrentLanguage<L>` bounds:
 
 ```toml
 [dependencies]
-es-fluent-lang = { git = "https://github.com/stayhydated/es-fluent" }
+es-fluent-lang = "0.19"
 strum = { version = "0.28", features = ["derive"] }
 ```
 

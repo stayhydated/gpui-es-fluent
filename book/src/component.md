@@ -5,8 +5,8 @@ embedded `I18n` global aligned:
 
 ```toml
 [dependencies]
-gpui-kit = "0.6.0"
-gpui-es-fluent = { git = "https://github.com/stayhydated/gpui-es-fluent", features = ["component"] }
+gpui-kit = "0.6.1"
+gpui-es-fluent = { version = "0.2", features = ["component"] }
 ```
 
 Use the published `gpui-kit` facade so the application and `gpui-es-fluent`
