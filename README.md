@@ -9,11 +9,11 @@ messages and labels from any context that borrows `gpui_kit::App`.
 
 ## Install
 
-`gpui-es-fluent` requires Rust 1.96 or newer.
+`gpui-es-fluent` requires Rust 1.98 or newer.
 
 ```toml
 [dependencies]
-gpui-es-fluent = "0.1"
+gpui-es-fluent = "0.2"
 ```
 
 Enable the `component` feature when the application also uses GPUI Kit's
@@ -21,7 +21,7 @@ component locale state:
 
 ```toml
 [dependencies]
-gpui-es-fluent = { version = "0.1", features = ["component"] }
+gpui-es-fluent = { version = "0.2", features = ["component"] }
 ```
 
 ## Quick start

@@ -7,21 +7,21 @@ global with an active language, and renders the message from a GPUI context.
 
 Start with:
 
-- Rust 1.96 or newer,
+- Rust 1.98 or newer,
 - an existing GPUI application,
 - the `cargo es-fluent` command, and
 - the published GPUI Kit facade:
 
 ```toml
 [dependencies]
-es-fluent = { git = "https://github.com/stayhydated/es-fluent" }
-es-fluent-manager-embedded = { git = "https://github.com/stayhydated/es-fluent" }
-gpui-kit = "0.6.0"
-gpui-es-fluent = { git = "https://github.com/stayhydated/gpui-es-fluent" }
+es-fluent = "0.19"
+es-fluent-manager-embedded = "0.19"
+gpui-kit = "0.6.1"
+gpui-es-fluent = "0.2"
 unic-langid = "0.9"
 
 [build-dependencies]
-es-fluent-build = { git = "https://github.com/stayhydated/es-fluent" }
+es-fluent-build = "0.19"
 ```
 
 Use GPUI through `gpui-kit`; it pins and re-exports the matching published GPUI
