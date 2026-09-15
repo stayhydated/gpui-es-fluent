@@ -10,9 +10,9 @@ Choose the installation helper based on the desired active language:
 
 | Helper | Existing global | Active language |
 | --- | --- | --- |
-| `init` | Preserved | Embedded default on a new installation |
-| `init_with_language` | Preserved | The requested language is selected only when a global is installed |
-| `replace_with_language` | Replaced | The requested language is selected on the replacement |
+| `init` | Preserved | Select separately after installation |
+| `init_with_language` | Preserved | Requested language on a new installation |
+| `replace_with_language` | Replaced | Requested language on the replacement |
 
 For application startup, install the expected language before opening windows:
 
@@ -21,11 +21,12 @@ let language = "fr-FR".parse::<unic_langid::LanguageIdentifier>()?;
 gpui_es_fluent::init_with_language(cx, language)?;
 ```
 
-Use `init` when the embedded manager's configured default is the desired
-startup language:
+Use `init` when setup and language selection need separate steps:
 
 ```rust,ignore
 gpui_es_fluent::init(cx)?;
+let language = "en".parse::<unic_langid::LanguageIdentifier>()?;
+gpui_es_fluent::change_locale(cx, language)?;
 ```
 
 Because `init` and `init_with_language` preserve an existing global, neither
@@ -38,17 +39,19 @@ module must support the same locale.
 
 ## Choose lookup behavior
 
-Hard-failing helpers require both the installed global and the typed resource:
+Use `localize_message` and `localize_label` after initializing the global:
 
 ```rust,ignore
 let message = gpui_es_fluent::localize_message(cx, &AppMessage::Save);
 let label = gpui_es_fluent::localize_label::<Settings>(cx);
 ```
 
-They panic when the global or resource is missing. Use them in rendering paths
-where a missing translation is an application defect.
+Both helpers panic when the global is missing. With `es-fluent`'s default strict
+message policy, they also panic when a typed resource cannot be resolved after
+locale fallback. A package configured with `missing_message_policy = "fallback-str"`
+returns the generated source-name fallback for missing resources.
 
-Use the `try_*` helpers when the caller has a deliberate missing-state path:
+Use the `try_*` helpers when the caller handles missing output:
 
 ```rust,ignore
 if let Some(message) =
@@ -59,7 +62,8 @@ if let Some(message) =
 ```
 
 Both fallible helpers return `None` when the global is absent or the typed
-resource cannot be localized. They do not distinguish those causes.
+resource cannot be localized, including under `fallback-str`. They do not
+distinguish those causes.
 
 ## Access the embedded manager
 
