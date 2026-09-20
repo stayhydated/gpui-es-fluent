@@ -12,7 +12,7 @@ command. Add these dependencies to the application:
 [dependencies]
 es-fluent = "0.19"
 es-fluent-manager-embedded = "0.19"
-gpui-kit = "0.6.1"
+gpui-kit = "0.6.4"
 gpui-es-fluent = "0.2"
 unic-langid = "0.9"
 
