@@ -29,9 +29,10 @@ resources cannot form a usable Fluent bundle.
 ## Require every application module
 
 The facade's language-selection helpers use `EmbeddedI18n`'s best-effort
-policy. A locale switch succeeds when at least one discovered application
-module accepts the locale; modules that reject it are left out of the active
-manager, so lookups for their resources remain missing.
+policy: at least one discovered application module must accept the locale.
+Modules that report `LanguageNotSupported` are skipped, so their resources are
+unavailable after the switch. Other errors, such as an unusable Fluent bundle,
+fail the switch and preserve the previous resources.
 
 When every discovered module must support the locale, install the global
 without a language and select through the underlying manager's strict API:
