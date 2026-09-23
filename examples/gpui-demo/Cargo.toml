@@ -1,6 +1,6 @@
 [package]
 name = "gpui-es-fluent-demo"
-version = "0.2.0"
+version.workspace = true
 rust-version = "1.98"
 edition = "2024"
 license = "Unlicense"
@@ -12,9 +12,9 @@ name = "demo"
 path = "src/main.rs"
 
 [dependencies]
-es-fluent = "0.19.0"
-es-fluent-manager-embedded = "0.19.0"
-gpui-kit = "0.6.1"
+es-fluent = "0.20.1"
+es-fluent-manager-embedded = "0.20.1"
+gpui-kit = "0.6.4"
 gpui-es-fluent = { features = [ "component" ], path = "../.." }
 
 [target.'cfg(target_family = "wasm")'.dependencies]
@@ -26,7 +26,7 @@ wasm-bindgen = "0.2"
 crate-type = [ "cdylib", "rlib" ]
 
 [build-dependencies]
-es-fluent-build = "0.19.0"
+es-fluent-build = "0.20.1"
 
 [lints.rust]
 future_incompatible = "deny"

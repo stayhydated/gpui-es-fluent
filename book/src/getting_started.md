@@ -5,18 +5,14 @@ global with an active language, and renders the message from a GPUI context.
 
 ## Prerequisites
 
-Start with:
-
-- Rust 1.98 or newer,
-- an existing GPUI application,
-- the `cargo es-fluent` command, and
-- the published GPUI Kit facade:
+Use Rust 1.98 or newer, an existing GPUI application, and the `cargo es-fluent`
+command. Add these dependencies to the application:
 
 ```toml
 [dependencies]
 es-fluent = "0.19"
 es-fluent-manager-embedded = "0.19"
-gpui-kit = "0.6.1"
+gpui-kit = "0.6.4"
 gpui-es-fluent = "0.2"
 unic-langid = "0.9"
 
@@ -98,8 +94,9 @@ app.run(|cx| {
 ```
 
 `init_with_language` selects the requested locale when it installs the global.
-Use `init` instead when the embedded manager's configured default language is
-the desired startup language. Both helpers preserve an existing `I18n` global.
+Both it and `init` preserve an existing `I18n` global. Use `init` only when
+language selection will happen in a separate step; a newly installed manager
+needs a language before it can localize messages.
 
 ## 4. Render a typed message
 
@@ -122,9 +119,9 @@ assert!(
 
 - **A `localize_*` lookup says the global is not installed:** run an
   initialization helper before opening the application's windows.
-- **The global exists but a hard-failing lookup still panics:** select a
-  supported locale with `init_with_language` or `change_locale`, then check
-  that the generated FTL contains the message.
+- **The global exists but a strict lookup still panics:** select a
+  supported locale with `change_locale`, then check that the generated FTL
+  contains the message. `init_with_language` preserves an existing global.
 - **A message trait bound or `gpui_kit::App` type does not match:** run
   `cargo tree -d` from the application root and align duplicate `es-fluent` or
   GPUI packages with the dependency sources above.

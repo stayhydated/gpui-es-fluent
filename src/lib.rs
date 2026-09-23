@@ -15,7 +15,7 @@ pub struct I18n {
 }
 
 impl I18n {
-    /// Creates a localization manager using the embedded default language.
+    /// Creates a localization manager without selecting an active language.
     ///
     /// # Errors
     ///

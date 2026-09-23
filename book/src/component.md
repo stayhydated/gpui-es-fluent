@@ -5,7 +5,7 @@ embedded `I18n` global aligned:
 
 ```toml
 [dependencies]
-gpui-kit = "0.6.1"
+gpui-kit = "0.6.4"
 gpui-es-fluent = { version = "0.2", features = ["component"] }
 ```
 
@@ -17,13 +17,16 @@ locale, and install `I18n` before opening windows:
 
 ```rust,ignore
 gpui_kit::init(cx);
-gpui_kit::component::set_locale("en-US");
+gpui_kit::component::set_locale("en");
 gpui_es_fluent::init_from_component_locale(cx)?;
 ```
 
-`init_from_component_locale` preserves an existing `I18n` global without
-resynchronizing it. When a global may already exist, use
-`sync_component_locale` to apply the component locale.
+Use a startup locale supported by the application's embedded resources, such as
+`en` from [Getting started](getting_started.md).
+
+`init_from_component_locale` validates the component locale and preserves an
+existing `I18n` global without resynchronizing it. When a global may already
+exist, use `sync_component_locale` to apply the component locale.
 
 To change both systems at runtime, use `set_component_locale` and notify the
 owning entity:
