@@ -27,8 +27,8 @@ component = [ "gpui-kit/component", "dep:thiserror" ]
 default = [  ]
 
 [dependencies]
-es-fluent = "0.20.1"
-es-fluent-manager-embedded = "0.20.1"
+es-fluent = "0.20.3"
+es-fluent-manager-embedded = "0.20.3"
 gpui-kit = { default-features = false, version = "0.6.4" }
 strum = "0.28"
 thiserror = { optional = true, version = "2.0" }
