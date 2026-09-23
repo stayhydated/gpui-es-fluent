@@ -14,7 +14,7 @@ path = "src/main.rs"
 [dependencies]
 es-fluent = "0.20.3"
 es-fluent-manager-embedded = "0.20.3"
-gpui-kit = "0.6.4"
+gpui-kit = "0.6.6"
 gpui-es-fluent = { features = [ "component" ], path = "../.." }
 
 [target.'cfg(target_family = "wasm")'.dependencies]
