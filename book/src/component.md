@@ -67,7 +67,6 @@ The helpers return `ComponentLocaleError` with distinct cases:
 - `Initialization` when a manager cannot initialize the selected language, and
 - `Selection` when an installed manager rejects a locale during synchronization.
 
-`set_component_locale` validates the string before changing either system. If
-manager initialization later fails, the component locale may already contain
-the new value while any previous `I18n` global remains installed. Restore the
-previous component locale or retry with a supported locale before rendering.
+`set_component_locale` validates the string and initializes the replacement
+manager before changing either system. If either step fails, the component
+locale and any existing `I18n` global remain unchanged.
