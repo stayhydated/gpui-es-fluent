@@ -278,10 +278,13 @@ pub enum ComponentLocaleError {
 /// Returns [`ComponentLocaleError::InvalidLocale`] when GPUI Kit
 /// contains an invalid language identifier.
 pub fn component_language() -> Result<LanguageIdentifier, ComponentLocaleError> {
-    let locale = gpui_kit::component::locale().to_string();
+    let locale = gpui_kit::component::locale();
     locale
         .parse::<LanguageIdentifier>()
-        .map_err(|source| ComponentLocaleError::InvalidLocale { locale, source })
+        .map_err(|source| ComponentLocaleError::InvalidLocale {
+            locale: locale.to_string(),
+            source,
+        })
 }
 
 #[cfg(feature = "component")]
@@ -347,6 +350,8 @@ mod tests {
         FluentArgumentMap, I18nModule, I18nModuleDescriptor, I18nModuleRegistration, Localizer,
         ModuleData, ModuleDomain,
     };
+    #[cfg(feature = "component")]
+    use std::assert_matches;
     use std::sync::{Mutex, Once};
     use unic_langid::langid;
 
@@ -582,10 +587,10 @@ mod tests {
         assert_eq!(component_language().unwrap(), language("fr"));
 
         gpui_kit::component::set_locale("not a locale");
-        assert!(matches!(
+        assert_matches!(
             component_language(),
             Err(ComponentLocaleError::InvalidLocale { locale, .. }) if locale == "not a locale"
-        ));
+        );
         gpui_kit::component::set_locale("en-US");
     }
 
@@ -616,11 +621,11 @@ mod tests {
                 assert_eq!(&*gpui_kit::component::locale(), "fr");
                 assert_eq!(localize_message(&*cx, &TestMessage), "Bonjour du test");
 
-                assert!(matches!(
+                assert_matches!(
                     set_component_locale(cx, "not a locale"),
                     Err(ComponentLocaleError::InvalidLocale { locale, .. })
                         if locale == "not a locale"
-                ));
+                );
                 assert_eq!(&*gpui_kit::component::locale(), "fr");
             })
         });
