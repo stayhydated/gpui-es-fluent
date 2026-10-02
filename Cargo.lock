@@ -7370,6 +7370,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "quick-xml"
+version = "0.42.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "41b1177fdf999d2321d3fb46ff47159d9c1fb9ad66a4879f8c50a0b504615e9b"
+dependencies = [
+ "memchr",
+]
+
+[[package]]
 name = "quinn"
 version = "0.11.12"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -8673,7 +8682,7 @@ checksum = "a2eb9349b6444b326872e140eb1cf5e7c522154d69e7a0ffb0fb81c06b37543f"
 [[package]]
 name = "stayhydated-dioxus"
 version = "0.1.0"
-source = "git+https://github.com/stayhydated/shared?rev=14df45a56f8fa847f816cf297c7b36dffb77ea1e#14df45a56f8fa847f816cf297c7b36dffb77ea1e"
+source = "git+https://github.com/stayhydated/shared?rev=ab491dd907051b743033ecdae96d4668a7708f0d#ab491dd907051b743033ecdae96d4668a7708f0d"
 dependencies = [
  "bon",
  "dioxus",
@@ -8687,7 +8696,7 @@ dependencies = [
 [[package]]
 name = "stayhydated-dioxus-core"
 version = "0.1.0"
-source = "git+https://github.com/stayhydated/shared?rev=14df45a56f8fa847f816cf297c7b36dffb77ea1e#14df45a56f8fa847f816cf297c7b36dffb77ea1e"
+source = "git+https://github.com/stayhydated/shared?rev=ab491dd907051b743033ecdae96d4668a7708f0d#ab491dd907051b743033ecdae96d4668a7708f0d"
 dependencies = [
  "bytemuck",
  "derive_more",
@@ -8704,16 +8713,17 @@ dependencies = [
 [[package]]
 name = "stayhydated-site"
 version = "0.1.0"
-source = "git+https://github.com/stayhydated/shared?rev=14df45a56f8fa847f816cf297c7b36dffb77ea1e#14df45a56f8fa847f816cf297c7b36dffb77ea1e"
+source = "git+https://github.com/stayhydated/shared?rev=ab491dd907051b743033ecdae96d4668a7708f0d#ab491dd907051b743033ecdae96d4668a7708f0d"
 dependencies = [
  "derive_more",
  "dioxus",
+ "quick-xml 0.42.0",
 ]
 
 [[package]]
 name = "stayhydated-xtask"
 version = "0.1.0"
-source = "git+https://github.com/stayhydated/shared?rev=14df45a56f8fa847f816cf297c7b36dffb77ea1e#14df45a56f8fa847f816cf297c7b36dffb77ea1e"
+source = "git+https://github.com/stayhydated/shared?rev=ab491dd907051b743033ecdae96d4668a7708f0d#ab491dd907051b743033ecdae96d4668a7708f0d"
 dependencies = [
  "anyhow",
  "bon",
@@ -10194,7 +10204,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "338e30461b3a2b67d70eb30a6d89f8e0c93a833e07d2ae89085cd070c4a00ac0"
 dependencies = [
  "proc-macro2",
- "quick-xml",
+ "quick-xml 0.41.0",
  "quote",
 ]
 
@@ -11382,7 +11392,7 @@ checksum = "a6c2ad15e0e922856ee89afe862b8992334bbe7953adad56cd1199358cb30566"
 dependencies = [
  "bitflags 2.13.2",
  "libc",
- "quick-xml",
+ "quick-xml 0.41.0",
  "x11",
 ]
 
