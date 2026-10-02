@@ -2,7 +2,7 @@
 name = "gpui-es-fluent"
 description = "GPUI global-state integration helpers for es-fluent"
 version.workspace = true
-rust-version = "1.98"
+rust-version = "1.99"
 edition = "2024"
 license = "MIT OR Apache-2.0"
 publish = true

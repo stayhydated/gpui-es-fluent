@@ -5,7 +5,7 @@ global with an active language, and renders the message from a GPUI context.
 
 ## Prerequisites
 
-Use Rust 1.98 or newer, an existing GPUI application, and the `cargo es-fluent`
+Use Rust 1.99 or newer, an existing GPUI application, and the `cargo es-fluent`
 command. Add these dependencies to the application:
 
 ```toml

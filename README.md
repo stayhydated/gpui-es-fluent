@@ -9,6 +9,8 @@
 an embedded `es-fluent` manager in GPUI global state, so every view can localize
 typed messages and labels through its app context.
 
+gpui-es-fluent requires Rust 1.99 or newer.
+
 ## Overview
 
 - `I18n` wraps `es-fluent-manager-embedded` and implements `gpui_kit::Global`.
