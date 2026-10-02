@@ -302,6 +302,8 @@ pub fn init_from_component_locale(cx: &mut App) -> Result<(), ComponentLocaleErr
 #[cfg(feature = "component")]
 /// Sets GPUI Kit's component locale and replaces the [`I18n`] global to match it.
 ///
+/// Both states remain unchanged if validation or initialization fails.
+///
 /// # Errors
 ///
 /// Returns [`ComponentLocaleError`] when `locale` is invalid or the embedded
@@ -318,8 +320,9 @@ pub fn set_component_locale(
         }
     })?;
 
+    let replacement = I18n::new_with_language(language.clone())?;
     gpui_kit::component::set_locale(&language.to_string());
-    replace_with_language(cx, language.clone())?;
+    cx.set_global(replacement);
     Ok(language)
 }
 
@@ -629,6 +632,38 @@ mod tests {
                 assert_eq!(&*gpui_kit::component::locale(), "fr");
             })
         });
+    }
+
+    #[cfg(feature = "component")]
+    #[test]
+    fn set_component_locale_preserves_state_when_initialization_fails() {
+        let _guard = component_locale_lock();
+        force_inventory_link();
+        gpui_kit::component::set_locale("en-US");
+
+        with_test_app(|cx| {
+            cx.update(|cx| {
+                assert_matches!(
+                    set_component_locale(cx, "de"),
+                    Err(ComponentLocaleError::Initialization(
+                        EmbeddedInitError::LanguageSelection(LocalizationError::LanguageNotSupported(rejected))
+                    )) if rejected == language("de")
+                );
+                assert_eq!(&*gpui_kit::component::locale(), "en-US");
+                assert!(cx.try_global::<I18n>().is_none());
+
+                set_component_locale(cx, "fr").unwrap();
+                assert_matches!(
+                    set_component_locale(cx, "de"),
+                    Err(ComponentLocaleError::Initialization(
+                        EmbeddedInitError::LanguageSelection(LocalizationError::LanguageNotSupported(rejected))
+                    )) if rejected == language("de")
+                );
+                assert_eq!(&*gpui_kit::component::locale(), "fr");
+                assert_eq!(localize_message(&*cx, &TestMessage), "Bonjour du test");
+            })
+        });
+        gpui_kit::component::set_locale("en-US");
     }
 
     #[cfg(feature = "component")]

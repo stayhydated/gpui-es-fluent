@@ -18,6 +18,7 @@ gpui-es-fluent requires Rust 1.99 or newer.
   context that borrows `gpui_kit::App`.
 - Locale helpers update the installed manager, while the optional `component`
   feature synchronizes it with GPUI Kit's component locale.
+  `set_component_locale` preserves both states if validation or initialization fails.
 
 ## Example
 

@@ -22,6 +22,10 @@ repository's command index.
 - Keep GPUI Kit component integration behind `component`. Changes to that API
   should update the feature-gated implementation, `book/src/component.md`,
   README feature guidance, and the GPUI demo.
+- `set_component_locale` initializes the replacement manager before changing
+  either the component locale or the `I18n` global. Preserve both states when
+  validation or initialization fails; its unit tests cover absent and existing
+  globals.
 - Demo messages belong in `examples/gpui-demo/src/lib.rs`; its `src/i18n.rs`
   registers the embedded manager and `build.rs` tracks locale assets. Keep
   message changes aligned with `examples/gpui-demo/assets/i18n/` and the
