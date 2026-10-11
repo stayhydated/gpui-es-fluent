@@ -43,6 +43,10 @@ Run the narrowest check for the changed surface:
 - README and rustdoc: `cargo doc -p gpui-es-fluent --all-features --no-deps --locked`
   and `cargo test -p gpui-es-fluent --doc --all-features --locked` for examples.
 - Markdown: `rumdl check README.md AGENTS.md book/src`.
+- Repository quality: `bash scripts/check-quality.sh` with the pinned CI tools installed.
+- Facade features: `bash scripts/check-features.sh <selection>` with `default`,
+  `no-default`, or `component`; each uses an isolated consumer without demo features.
+- Dependency policy: `cargo deny --workspace --locked --all-features check advisories sources`.
 - Book content: `cargo xtask build book` and `cargo xtask build llms-txt`.
 - Wasm demo: `cargo xtask build gpui-demo` uses nightly.
 - Catalog: `cargo xtask build web`; `just web-build` runs the complete

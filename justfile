@@ -19,13 +19,13 @@ test:
     cargo test --workspace --all-features --locked
 
 cov:
-    cargo llvm-cov --workspace --all-features --all-targets \
+    cargo llvm-cov --workspace --all-features --all-targets --locked \
         --exclude gpui-es-fluent-demo \
         --exclude xtask \
         --exclude web
 
 test-publish:
-    cargo publish --workspace --dry-run --allow-dirty
+    cargo publish --workspace --dry-run --locked --allow-dirty
 
 book:
     mdbook serve book
