@@ -43,7 +43,7 @@ Run the narrowest check for the changed surface:
 - README and rustdoc: `cargo doc -p gpui-es-fluent --all-features --no-deps --locked`
   and `cargo test -p gpui-es-fluent --doc --all-features --locked` for examples.
 - Markdown: `rumdl check README.md AGENTS.md book/src`.
-- Repository quality: `bash scripts/check-quality.sh` with the pinned CI tools installed.
+- Repository quality: `just quality` with the pinned CI tools installed.
 - Facade features: `bash scripts/check-features.sh <selection>` with `default`,
   `no-default`, or `component`; each uses an isolated consumer without demo features.
 - Dependency policy: `cargo deny --workspace --locked --all-features check advisories sources`.

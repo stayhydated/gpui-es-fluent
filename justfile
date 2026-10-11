@@ -9,6 +9,15 @@ fmt:
     taplo fmt
     rumdl fmt .
 
+# Run with the pinned CI quality tools installed.
+quality:
+    taplo fmt --check
+    rumdl check .
+    typos
+    cargo sort-derives --check
+    actionlint
+    git ls-files -z '*.sh' '*.bash' | xargs -0 --no-run-if-empty shellcheck
+
 clippy:
     cargo clippy --workspace --all-targets --all-features --locked -- -D warnings
 
