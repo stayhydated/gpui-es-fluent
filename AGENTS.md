@@ -43,7 +43,8 @@ Run the narrowest check for the changed surface:
 - README and rustdoc: `cargo doc -p gpui-es-fluent --all-features --no-deps --locked`
   and `cargo test -p gpui-es-fluent --doc --all-features --locked` for examples.
 - Markdown: `rumdl check README.md AGENTS.md book/src`.
-- Repository quality: `just quality` with the pinned CI tools installed.
+- Repository quality: `just quality` with the versioned CI tools installed
+  and Docker available.
 - Facade features: `bash scripts/check-features.sh <selection>` with `default`,
   `no-default`, or `component`; each uses an isolated consumer without demo features.
 - Dependency policy: `cargo deny --workspace --locked --all-features check advisories sources`.
@@ -54,3 +55,10 @@ Run the narrowest check for the changed surface:
 
 Use `.github/workflows/ci.yml` when reproducing the workspace checks required
 by CI. Report which checks ran, which failed, and which were not run.
+
+The dependency policy checks unmaintained advisories for immediate normal,
+development, and build dependencies of workspace members. Vulnerability,
+yanked-package, and source checks still cover the full dependency graph.
+
+Workflow Actions use verified version tags. The local quality recipe and CI
+both use `rhysd/actionlint:1.7.12`, including ShellCheck and pyflakes.
