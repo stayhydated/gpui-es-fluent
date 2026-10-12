@@ -9,34 +9,59 @@
 an embedded `es-fluent` manager in GPUI global state, so every view can localize
 typed messages and labels through its app context.
 
-gpui-es-fluent requires Rust 1.99 or newer.
+Requires Rust 1.99 or newer and GPUI Kit 0.7. This workspace publishes the
+`gpui-es-fluent` root package; its demo, site, and build tool are unpublished.
+Message-owning packages provide their locale configuration, fallback assets,
+build-script tracking, and embedded module registration.
 
 ## Overview
 
 - `I18n` wraps `es-fluent-manager-embedded` and implements `gpui_kit::Global`.
-- Strict and fallible helpers localize generated messages and labels from any
-  context that borrows `gpui_kit::App`.
-- Locale helpers update the installed manager, while the optional `component`
-  feature synchronizes it with GPUI Kit's component locale.
-  `set_component_locale` preserves both states if validation or initialization fails.
+- Typed message and label helpers work with any context borrowing `gpui_kit::App`.
+  Their `try_*` counterparts return `None` when the global or translation is absent.
+- `init_with_language` preserves an installed global; `replace_with_language`
+  explicitly replaces it. After changing the locale, notify the owning view to
+  render the updated text.
+
+## Features
+
+No optional features are enabled by default.
+
+| Feature | Default | Purpose |
+| --- | --- | --- |
+| `default` | Yes | Enables no features. |
+| `component` | No | Enables GPUI Kit component support and helpers that synchronize component and localization locales; activates the optional `thiserror` dependency. |
+
+`set_component_locale` validates and initializes the replacement manager before
+changing either locale state. See the [public API][api] for the component and
+embedded-manager helpers.
 
 ## Example
 
-Install the global with a supported language before opening application windows:
+The host supplies a GPUI `App`, a supported `LanguageIdentifier`, and an
+`es-fluent` message whose owning library registered its embedded assets. Call
+this during startup before a global has been installed:
 
 ```rust,no_run
-fn initialize(cx: &mut gpui_kit::App) -> Result<(), gpui_es_fluent::EmbeddedInitError> {
-    let language = "en"
-        .parse::<unic_langid::LanguageIdentifier>()
-        .expect("the fallback locale should be valid");
-    gpui_es_fluent::init_with_language(cx, language)
+use es_fluent::FluentMessage;
+use gpui_es_fluent::{EmbeddedInitError, init_with_language, localize_message};
+use gpui_kit::App;
+use unic_langid::LanguageIdentifier;
+
+fn translated_text(
+    cx: &mut App,
+    language: LanguageIdentifier,
+    message: &impl FluentMessage,
+) -> Result<String, EmbeddedInitError> {
+    init_with_language(cx, language)?;
+    Ok(localize_message(&*cx, message))
 }
 ```
 
-Views can then pass generated `es-fluent` message and label types to
-`localize_message`, `localize_label`, or their fallible `try_*` counterparts.
-After a runtime locale change, notify the owning view so it renders the updated
-text.
+The result is the message rendered in the selected locale. The [maintained
+GPUI demo][demo] provides complete registration, typed messages, and a view;
+with `component` enabled, it uses `set_component_locale` to keep GPUI Kit's
+locale aligned. Its English heading is “One GPUI view, two locales”.
 
 [ci-badge]: https://github.com/stayhydated/gpui-es-fluent/actions/workflows/ci.yml/badge.svg?branch=master
 [ci]: https://github.com/stayhydated/gpui-es-fluent/actions/workflows/ci.yml
@@ -46,3 +71,5 @@ text.
 [book]: https://stayhydated.github.io/gpui-es-fluent/book/
 [crate-badge]: https://img.shields.io/crates/v/gpui-es-fluent.svg?label=gpui-es-fluent
 [crate]: https://crates.io/crates/gpui-es-fluent
+[api]: https://docs.rs/gpui-es-fluent/latest/gpui_es_fluent/
+[demo]: https://github.com/stayhydated/gpui-es-fluent/tree/master/examples/gpui-demo
