@@ -9,6 +9,15 @@ fmt:
     taplo fmt
     rumdl fmt .
 
+# Run with the versioned CI quality tools installed and Docker available.
+quality:
+    taplo fmt --check
+    rumdl check .
+    typos
+    cargo sort-derives --check
+    docker run --rm -v "{{justfile_directory()}}:/repo" -w /repo rhysd/actionlint:1.7.12
+    git ls-files -z '*.sh' '*.bash' | xargs -0 --no-run-if-empty shellcheck
+
 clippy:
     cargo clippy --workspace --all-targets --all-features --locked -- -D warnings
 
@@ -19,13 +28,13 @@ test:
     cargo test --workspace --all-features --locked
 
 cov:
-    cargo llvm-cov --workspace --all-features --all-targets \
+    cargo llvm-cov --workspace --all-features --all-targets --locked \
         --exclude gpui-es-fluent-demo \
         --exclude xtask \
         --exclude web
 
 test-publish:
-    cargo publish --workspace --dry-run --allow-dirty
+    cargo publish --workspace --dry-run --locked --allow-dirty
 
 book:
     mdbook serve book
