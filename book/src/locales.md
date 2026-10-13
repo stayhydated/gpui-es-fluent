@@ -71,7 +71,7 @@ supported-language enum that meets the `CurrentLanguage<L>` bounds:
 
 ```toml
 [dependencies]
-es-fluent-lang = "0.19"
+es-fluent-lang = "0.21"
 strum = { version = "0.28", features = ["derive"] }
 ```
 
