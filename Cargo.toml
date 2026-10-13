@@ -29,13 +29,13 @@ default = [  ]
 [dependencies]
 es-fluent = "0.21.0"
 es-fluent-manager-embedded = "0.21.0"
-gpui-kit = { default-features = false, version = "0.7.0" }
+gpui-kit = { default-features = false, version = "0.7.3" }
 strum = "0.28"
 thiserror = { optional = true, version = "2.0" }
 unic-langid = { features = [ "serde" ], version = "0.9" }
 
 [dev-dependencies]
-gpui-kit = { default-features = false, features = [ "test-support" ], version = "0.7.0" }
+gpui-kit = { default-features = false, features = [ "test-support" ], version = "0.7.3" }
 
 [profile.dev]
 codegen-units = 16

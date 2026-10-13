@@ -10,14 +10,14 @@ command. Add these dependencies to the application:
 
 ```toml
 [dependencies]
-es-fluent = "0.19"
-es-fluent-manager-embedded = "0.19"
-gpui-kit = "0.6.4"
-gpui-es-fluent = "0.2"
+es-fluent = "0.21"
+es-fluent-manager-embedded = "0.21"
+gpui-kit = "0.7.3"
+gpui-es-fluent = "0.3"
 unic-langid = "0.9"
 
 [build-dependencies]
-es-fluent-build = "0.19"
+es-fluent-build = "0.21"
 ```
 
 Use GPUI through `gpui-kit`; it pins and re-exports the matching published GPUI

@@ -15,7 +15,7 @@ path = "src/main.rs"
 es-fluent = "0.21.0"
 es-fluent-manager-embedded = "0.21.0"
 gpui-es-fluent = { features = [ "component" ], path = "../.." }
-gpui-kit = "0.7.0"
+gpui-kit = "0.7.3"
 
 [target.'cfg(target_family = "wasm")'.dependencies]
 console_error_panic_hook = "0.1"
