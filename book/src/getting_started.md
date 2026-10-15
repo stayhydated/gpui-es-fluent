@@ -14,7 +14,7 @@ es-fluent = "0.21"
 es-fluent-manager-embedded = "0.21"
 gpui-kit = "0.7.3"
 gpui-es-fluent = "0.3"
-unic-langid = "0.9"
+unic-langid = "0.9.6"
 
 [build-dependencies]
 es-fluent-build = "0.21"
