@@ -28,7 +28,6 @@ No optional features are enabled by default.
 
 | Feature | Default | Purpose |
 | --- | --- | --- |
-| `default` | Yes | Enables no features. |
 | `component` | No | Enables GPUI Kit component support and helpers that synchronize component and localization locales; activates the optional `thiserror` dependency. |
 
 `set_component_locale` validates and initializes the replacement manager before

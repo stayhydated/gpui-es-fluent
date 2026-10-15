@@ -161,6 +161,8 @@ pub fn init_with_language(
 
 /// Replaces any existing [`I18n`] global with one initialized for `language`.
 ///
+/// If initialization fails, an existing global and its translations remain unchanged.
+///
 /// # Errors
 ///
 /// Returns [`EmbeddedInitError`] when the embedded localization manager cannot
@@ -210,8 +212,9 @@ where
 ///
 /// # Panics
 ///
-/// Panics when no global is installed or when the typed Fluent message is
-/// missing from the active resources.
+/// Panics when no global is installed or a message using the strict missing-message
+/// policy cannot be resolved. Messages generated with `fallback-str` return their
+/// source-name fallback when the global exists but the resource is missing.
 pub fn localize_message<T>(cx: &impl Borrow<App>, message: &T) -> String
 where
     T: FluentMessage + ?Sized,
@@ -237,8 +240,9 @@ where
 ///
 /// # Panics
 ///
-/// Panics when no global is installed or when the typed Fluent label is
-/// missing from the active resources.
+/// Panics when no global is installed or a label using the strict missing-message
+/// policy cannot be resolved. Labels generated with `fallback-str` return their
+/// source-name fallback when the global exists but the resource is missing.
 pub fn localize_label<T>(cx: &impl Borrow<App>) -> String
 where
     T: FluentLabel,
@@ -353,7 +357,6 @@ mod tests {
         FluentArgumentMap, I18nModule, I18nModuleDescriptor, I18nModuleRegistration, Localizer,
         ModuleData, ModuleDomain,
     };
-    #[cfg(feature = "component")]
     use std::assert_matches;
     use std::sync::{Mutex, Once};
     use unic_langid::langid;
@@ -567,8 +570,38 @@ mod tests {
         force_inventory_link();
         let i18n = I18n::new_with_language(language("en-US")).unwrap();
 
-        assert!(i18n.select_language(language("de")).is_err());
-        assert!(I18n::new_with_language(language("de")).is_err());
+        assert_matches!(
+            i18n.select_language(language("de")),
+            Err(LocalizationError::LanguageNotSupported(rejected)) if rejected == language("de")
+        );
+        assert_eq!(i18n.localize_message(&TestMessage), "Hello from test");
+        assert_eq!(i18n.localize_label::<TestLabel>(), "Test label");
+        assert_matches!(
+            I18n::new_with_language(language("de")).err(),
+            Some(EmbeddedInitError::LanguageSelection(
+                LocalizationError::LanguageNotSupported(rejected)
+            )) if rejected == language("de")
+        );
+    }
+
+    #[test]
+    fn failed_replacement_preserves_existing_translations() {
+        force_inventory_link();
+
+        with_test_app(|cx| {
+            cx.update(|cx| {
+                init_with_language(cx, language("fr")).unwrap();
+
+                assert_matches!(
+                    replace_with_language(cx, language("de")),
+                    Err(EmbeddedInitError::LanguageSelection(
+                        LocalizationError::LanguageNotSupported(rejected)
+                    )) if rejected == language("de")
+                );
+                assert_eq!(localize_message(&*cx, &TestMessage), "Bonjour du test");
+                assert_eq!(localize_label::<TestLabel>(&*cx), "Etiquette de test");
+            })
+        });
     }
 
     #[cfg(feature = "component")]

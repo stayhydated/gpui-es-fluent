@@ -25,6 +25,8 @@ use `change_locale` as described below.
 Both helpers return an initialization error when module discovery fails, when
 no discovered application module supports the requested language, or when its
 resources cannot form a usable Fluent bundle.
+If `replace_with_language` fails, an existing global and its translations remain
+unchanged.
 
 ## Require every application module
 
@@ -72,7 +74,7 @@ supported-language enum that meets the `CurrentLanguage<L>` bounds:
 ```toml
 [dependencies]
 es-fluent-lang = "0.21"
-strum = { version = "0.28", features = ["derive"] }
+strum = { version = "0.28.0", features = ["derive"] }
 ```
 
 ```rust,ignore
