@@ -5,7 +5,7 @@ embedded `I18n` global aligned:
 
 ```toml
 [dependencies]
-gpui-kit = "0.7.3"
+gpui-kit = "0.8.0"
 gpui-es-fluent = { version = "0.3", features = ["component"] }
 ```
 
