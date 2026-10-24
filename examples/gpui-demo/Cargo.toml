@@ -12,8 +12,8 @@ name = "demo"
 path = "src/main.rs"
 
 [dependencies]
-es-fluent = "0.21.0"
-es-fluent-manager-embedded = "0.21.0"
+es-fluent = "0.21.1"
+es-fluent-manager-embedded = "0.21.1"
 gpui-es-fluent = { features = [ "component" ], path = "../.." }
 gpui-kit = "0.8.0"
 
@@ -26,7 +26,7 @@ wasm-bindgen = "0.2.129"
 crate-type = [ "cdylib", "rlib" ]
 
 [build-dependencies]
-es-fluent-build = "0.21.0"
+es-fluent-build = "0.21.1"
 
 [lints.rust]
 future_incompatible = "deny"
