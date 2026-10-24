@@ -18,17 +18,17 @@ version = "0.3.0"
 
 [workspace.dependencies]
 dioxus = { default-features = false, version = "0.7.10" }
-stayhydated-dioxus = { git = "https://github.com/stayhydated/shared", rev = "3136b369bb54312096ad83ba74735aab29109835" }
-stayhydated-site = { git = "https://github.com/stayhydated/shared", rev = "3136b369bb54312096ad83ba74735aab29109835" }
-stayhydated-xtask = { git = "https://github.com/stayhydated/shared", rev = "3136b369bb54312096ad83ba74735aab29109835" }
+stayhydated-dioxus = { git = "https://github.com/stayhydated/shared", rev = "b3f91071b4e61702a63f57844560f70bbc9bf623" }
+stayhydated-site = { git = "https://github.com/stayhydated/shared", rev = "b3f91071b4e61702a63f57844560f70bbc9bf623" }
+stayhydated-xtask = { git = "https://github.com/stayhydated/shared", rev = "b3f91071b4e61702a63f57844560f70bbc9bf623" }
 
 [features]
 component = [ "gpui-kit/component", "dep:thiserror" ]
 default = [  ]
 
 [dependencies]
-es-fluent = "0.21.0"
-es-fluent-manager-embedded = "0.21.0"
+es-fluent = "0.21.1"
+es-fluent-manager-embedded = "0.21.1"
 gpui-kit = { default-features = false, version = "0.8.0" }
 strum = "0.28.0"
 thiserror = { optional = true, version = "2.0.21" }
