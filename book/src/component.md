@@ -5,12 +5,14 @@ embedded `I18n` global aligned:
 
 ```toml
 [dependencies]
-gpui-kit = "0.8.0"
-gpui-es-fluent = { version = "0.3", features = ["component"] }
+gpui-kit = "0.9.0"
+gpui-es-fluent = { version = "0.4", features = ["component"] }
 ```
 
 Use the published `gpui-kit` facade so the application and `gpui-es-fluent`
 share one component locale and one GPUI crate identity.
+The 0.4 release supporting this combination is upcoming; published 0.3 versions
+require GPUI Kit 0.8.
 
 Initialize GPUI Kit first during application setup, set its startup
 locale, and install `I18n` before opening windows:
