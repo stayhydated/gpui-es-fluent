@@ -9,7 +9,9 @@
 an embedded `es-fluent` manager in GPUI global state, so every view can localize
 typed messages and labels through its app context.
 
-Requires Rust 1.99 or newer and GPUI Kit 0.8.0.
+Requires Rust 1.99 or newer and GPUI Kit 0.9.0.
+This source targets the upcoming 0.4 release line; published 0.3 versions use
+GPUI Kit 0.8.
 Message-owning packages provide their locale configuration, fallback assets,
 build-script tracking, and embedded module registration.
 

@@ -15,12 +15,12 @@ path = "src/main.rs"
 es-fluent = "0.21.1"
 es-fluent-manager-embedded = "0.21.1"
 gpui-es-fluent = { features = [ "component" ], path = "../.." }
-gpui-kit = "0.8.0"
+gpui-kit = "0.9.0"
 
 [target.'cfg(target_family = "wasm")'.dependencies]
 console_error_panic_hook = "0.1.7"
 ttf-inter = { default-features = false, features = [ "regular" ], version = "0.1.0" }
-wasm-bindgen = "0.2.129"
+wasm-bindgen = "0.2.130"
 
 [lib]
 crate-type = [ "cdylib", "rlib" ]
