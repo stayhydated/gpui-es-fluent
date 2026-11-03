@@ -11,8 +11,7 @@ gpui-es-fluent = { version = "0.4", features = ["component"] }
 
 Use the published `gpui-kit` facade so the application and `gpui-es-fluent`
 share one component locale and one GPUI crate identity.
-The 0.4 release supporting this combination is upcoming; published 0.3 versions
-require GPUI Kit 0.8.
+The 0.4 release line requires GPUI Kit 0.9. The 0.3 line requires GPUI Kit 0.8.
 
 Initialize GPUI Kit first during application setup, set its startup
 locale, and install `I18n` before opening windows:

@@ -367,9 +367,9 @@ dependencies = [
 
 [[package]]
 name = "async-executor"
-version = "1.14.0"
+version = "1.14.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c96bf972d85afc50bf5ab8fe2d54d1586b4e0b46c97c50a0c9e71e2f7bcd812a"
+checksum = "f426a31126c735126297bc5ea7a521263c9faff4f63ca415267ee625651c4f37"
 dependencies = [
  "async-task",
  "concurrent-queue",
@@ -2728,9 +2728,9 @@ dependencies = [
 
 [[package]]
 name = "es-fluent"
-version = "0.21.1"
+version = "0.21.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c08af90cc208829595e60b22f22d09bb635099be63e94d86856ae414c08e2af5"
+checksum = "9b67b81ea03b5aa40ceceedd5c24ffb9ed59fccfa3596969279a277968437509"
 dependencies = [
  "es-fluent-derive",
  "es-fluent-manager-core",
@@ -2742,9 +2742,9 @@ dependencies = [
 
 [[package]]
 name = "es-fluent-build"
-version = "0.21.1"
+version = "0.21.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "91667ae492003788701e04d6b2b46b9defdffdc87f9f3cc8010b82be9dfd2a99"
+checksum = "c55fd1e5f785ba417c55e364c5673e77be0a12f0bd9e9a2c7d0672c8dfde0ce9"
 dependencies = [
  "es-fluent-shared",
  "es-fluent-toml",
@@ -2752,9 +2752,9 @@ dependencies = [
 
 [[package]]
 name = "es-fluent-derive"
-version = "0.21.1"
+version = "0.21.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a5f6fe3c27d667e4f89d00d9b7a188071590c0e8f6b41b8021c872925f4b59fe"
+checksum = "1af966c650b419a1f4ae271345a8cbcf51e25a80ddef5e78d53228d6fc9fedf0"
 dependencies = [
  "darling 0.24.1",
  "es-fluent-derive-core",
@@ -2766,9 +2766,9 @@ dependencies = [
 
 [[package]]
 name = "es-fluent-derive-core"
-version = "0.21.1"
+version = "0.21.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "29d0af0da25833baef048a53110b137ce186be60c0e3ec7cc612e2135bf8bcbc"
+checksum = "c4c18e0e285a4e4b18772ee60bfbaaf96c7beb3611684a3c5fe7f889007b0c55"
 dependencies = [
  "bon",
  "darling 0.24.1",
@@ -2787,9 +2787,9 @@ dependencies = [
 
 [[package]]
 name = "es-fluent-manager-core"
-version = "0.21.1"
+version = "0.21.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ea68dea8b496574b2a1dbadd7ecdf13cead621cf9d0ab5ba85f67d155bc6d47b"
+checksum = "5eb99e2ff51411cb56a8aecf2edb1fcb292f9aac2497aeaa56e966af3f359e8a"
 dependencies = [
  "es-fluent-shared",
  "fluent-bundle",
@@ -2807,9 +2807,9 @@ dependencies = [
 
 [[package]]
 name = "es-fluent-manager-embedded"
-version = "0.21.1"
+version = "0.21.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "217c4ae8a61e013be1373d00388654c26a0d27d265b27032963183a1cba024be"
+checksum = "1937bba78ad06d7a5397e7e58a9b918e4b7dce609e2c4353f7c24a530a8cf9ff"
 dependencies = [
  "es-fluent",
  "es-fluent-manager-core",
@@ -2821,9 +2821,9 @@ dependencies = [
 
 [[package]]
 name = "es-fluent-manager-macros"
-version = "0.21.1"
+version = "0.21.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "478cc43f4b95dec3258c0457fa181fb31e0172eb631147d6cad0645959cc9d27"
+checksum = "f89f2b142938e58bface7cb661469ce8be31c88f147f85cf58529b02b35f699e"
 dependencies = [
  "es-fluent-derive-core",
  "es-fluent-shared",
@@ -2838,9 +2838,9 @@ dependencies = [
 
 [[package]]
 name = "es-fluent-shared"
-version = "0.21.1"
+version = "0.21.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "713238b165bf04ae1eaede72f35c7a944ecd17a91392f0f50cd8865c565389e6"
+checksum = "269426e7933c0ef0c52f47116cf813215226d1bd0006946ccb2c94ec176fbb86"
 dependencies = [
  "anyhow",
  "camino",
@@ -2862,9 +2862,9 @@ dependencies = [
 
 [[package]]
 name = "es-fluent-toml"
-version = "0.21.1"
+version = "0.21.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bec48c12e37be79fd6e3fcc21d26dcd11cc1efd3c276dcc5903a1bb6b72e80a1"
+checksum = "84cc4c004084106f0a3e75d9e22c85ccb2a34fd73a4fca636c45326ae8407e9d"
 dependencies = [
  "bon",
  "es-fluent-shared",
@@ -3649,7 +3649,7 @@ dependencies = [
 
 [[package]]
 name = "gpui-es-fluent"
-version = "0.3.1"
+version = "0.4.0"
 dependencies = [
  "es-fluent",
  "es-fluent-manager-embedded",
@@ -3661,7 +3661,7 @@ dependencies = [
 
 [[package]]
 name = "gpui-es-fluent-demo"
-version = "0.3.1"
+version = "0.4.0"
 dependencies = [
  "console_error_panic_hook",
  "es-fluent",
@@ -8905,7 +8905,7 @@ checksum = "a2eb9349b6444b326872e140eb1cf5e7c522154d69e7a0ffb0fb81c06b37543f"
 [[package]]
 name = "stayhydated-dioxus"
 version = "0.1.1"
-source = "git+https://github.com/stayhydated/shared?rev=d531bbbf740688a473e8230a90f7b6ebfaa24e70#d531bbbf740688a473e8230a90f7b6ebfaa24e70"
+source = "git+https://github.com/stayhydated/shared?rev=1569baacf4fb2a94bbf7d9f02615332407e104df#1569baacf4fb2a94bbf7d9f02615332407e104df"
 dependencies = [
  "bon",
  "dioxus",
@@ -8919,7 +8919,7 @@ dependencies = [
 [[package]]
 name = "stayhydated-dioxus-core"
 version = "0.1.1"
-source = "git+https://github.com/stayhydated/shared?rev=d531bbbf740688a473e8230a90f7b6ebfaa24e70#d531bbbf740688a473e8230a90f7b6ebfaa24e70"
+source = "git+https://github.com/stayhydated/shared?rev=1569baacf4fb2a94bbf7d9f02615332407e104df#1569baacf4fb2a94bbf7d9f02615332407e104df"
 dependencies = [
  "bytemuck",
  "derive_more",
@@ -8936,7 +8936,7 @@ dependencies = [
 [[package]]
 name = "stayhydated-site"
 version = "0.1.1"
-source = "git+https://github.com/stayhydated/shared?rev=d531bbbf740688a473e8230a90f7b6ebfaa24e70#d531bbbf740688a473e8230a90f7b6ebfaa24e70"
+source = "git+https://github.com/stayhydated/shared?rev=1569baacf4fb2a94bbf7d9f02615332407e104df#1569baacf4fb2a94bbf7d9f02615332407e104df"
 dependencies = [
  "derive_more",
  "dioxus",
@@ -8946,7 +8946,7 @@ dependencies = [
 [[package]]
 name = "stayhydated-xtask"
 version = "0.1.1"
-source = "git+https://github.com/stayhydated/shared?rev=d531bbbf740688a473e8230a90f7b6ebfaa24e70#d531bbbf740688a473e8230a90f7b6ebfaa24e70"
+source = "git+https://github.com/stayhydated/shared?rev=1569baacf4fb2a94bbf7d9f02615332407e104df#1569baacf4fb2a94bbf7d9f02615332407e104df"
 dependencies = [
  "anyhow",
  "bon",
@@ -10320,7 +10320,7 @@ dependencies = [
 
 [[package]]
 name = "web"
-version = "0.3.1"
+version = "0.4.0"
 dependencies = [
  "dioxus",
  "stayhydated-dioxus",
@@ -11403,7 +11403,7 @@ checksum = "ec7a2a501ed189703dba8b08142f057e887dfc4b2cc4db2d343ac6376ba3e0b9"
 
 [[package]]
 name = "xtask"
-version = "0.3.1"
+version = "0.4.0"
 dependencies = [
  "anyhow",
  "clap",

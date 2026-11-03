@@ -10,20 +10,19 @@ command. Add these dependencies to the application:
 
 ```toml
 [dependencies]
-es-fluent = "0.21"
-es-fluent-manager-embedded = "0.21"
+es-fluent = "0.21.2"
+es-fluent-manager-embedded = "0.21.2"
 gpui-kit = "0.9.0"
 gpui-es-fluent = "0.4"
 unic-langid = "0.9.6"
 
 [build-dependencies]
-es-fluent-build = "0.21"
+es-fluent-build = "0.21.2"
 ```
 
 Use GPUI through `gpui-kit`; it pins and re-exports the matching published GPUI
 crate family.
-These requirements target the upcoming 0.4 release. Published 0.3 versions
-require GPUI Kit 0.8.
+The 0.4 release line requires GPUI Kit 0.9. The 0.3 line requires GPUI Kit 0.8.
 
 ## 1. Configure the locale assets
 
