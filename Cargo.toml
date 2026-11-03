@@ -14,21 +14,21 @@ members = [ ".", "examples/gpui-demo", "web", "xtask" ]
 resolver = "3"
 
 [workspace.package]
-version = "0.3.1"
+version = "0.4.0"
 
 [workspace.dependencies]
 dioxus = { default-features = false, version = "0.7.10" }
-stayhydated-dioxus = { git = "https://github.com/stayhydated/shared", rev = "d531bbbf740688a473e8230a90f7b6ebfaa24e70" }
-stayhydated-site = { git = "https://github.com/stayhydated/shared", rev = "d531bbbf740688a473e8230a90f7b6ebfaa24e70" }
-stayhydated-xtask = { git = "https://github.com/stayhydated/shared", rev = "d531bbbf740688a473e8230a90f7b6ebfaa24e70" }
+stayhydated-dioxus = { git = "https://github.com/stayhydated/shared", rev = "1569baacf4fb2a94bbf7d9f02615332407e104df" }
+stayhydated-site = { git = "https://github.com/stayhydated/shared", rev = "1569baacf4fb2a94bbf7d9f02615332407e104df" }
+stayhydated-xtask = { git = "https://github.com/stayhydated/shared", rev = "1569baacf4fb2a94bbf7d9f02615332407e104df" }
 
 [features]
 component = [ "gpui-kit/component", "dep:thiserror" ]
 default = [  ]
 
 [dependencies]
-es-fluent = "0.21.1"
-es-fluent-manager-embedded = "0.21.1"
+es-fluent = "0.21.2"
+es-fluent-manager-embedded = "0.21.2"
 gpui-kit = { default-features = false, version = "0.9.0" }
 strum = "0.28.0"
 thiserror = { optional = true, version = "2.0.21" }
