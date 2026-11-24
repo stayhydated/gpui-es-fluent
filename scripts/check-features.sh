@@ -7,7 +7,7 @@ api='pub use gpui_es_fluent::{CurrentLanguage, I18n};
 
 pub fn check_app(app: &mut gpui::App) {
     let _ = gpui_es_fluent::init(app);
-    let _ = gpui_es_fluent::change_locale(app, "fr".parse().unwrap());
+    let _ = gpui_es_fluent::change_locale(app, "fr".parse::<unic_langid::LanguageIdentifier>().unwrap());
 }'
 case "$selection" in
   default) dependency='default-features = true' ;;
@@ -40,6 +40,7 @@ publish = false
 [dependencies]
 gpui = { package = "gpui-pre", version = "=0.3.14", default-features = false }
 gpui-es-fluent = { path = "$repo_dir", $dependency }
+unic-langid = "0.9.6"
 EOF
 printf '%s\n' "$api" > "$consumer/src/lib.rs"
 
