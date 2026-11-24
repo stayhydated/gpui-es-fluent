@@ -42,6 +42,9 @@ jobs:
           - macos-latest
           - windows-latest
 
+    env:
+      SCCACHE_CONF: ${{ github.workspace }}/.github/sccache.toml
+
     steps:
       - uses: actions/checkout@v7
         with:
@@ -82,6 +85,9 @@ jobs:
   clippy:
     runs-on: ubuntu-latest
 
+    env:
+      SCCACHE_CONF: ${{ github.workspace }}/.github/sccache.toml
+
     steps:
       - uses: actions/checkout@v7
         with:
@@ -105,6 +111,9 @@ jobs:
   docs:
     runs-on: ubuntu-latest
 
+    env:
+      SCCACHE_CONF: ${{ github.workspace }}/.github/sccache.toml
+
     steps:
       - uses: actions/checkout@v7
         with:
@@ -125,6 +134,9 @@ jobs:
 
   package:
     runs-on: ubuntu-latest
+
+    env:
+      SCCACHE_CONF: ${{ github.workspace }}/.github/sccache.toml
 
     steps:
       - uses: actions/checkout@v7
@@ -163,6 +175,9 @@ jobs:
 
   rust-coverage:
     runs-on: ubuntu-latest
+
+    env:
+      SCCACHE_CONF: ${{ github.workspace }}/.github/sccache.toml
 
     steps:
       - uses: actions/checkout@v7
@@ -270,6 +285,9 @@ jobs:
       fail-fast: false
       matrix:
         selection: [default, no-default, component]
+    env:
+      SCCACHE_CONF: ${{ github.workspace }}/.github/sccache.toml
+
     steps:
       - uses: actions/checkout@v7
         with:
