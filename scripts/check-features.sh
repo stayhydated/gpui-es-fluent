@@ -3,13 +3,23 @@ set -euo pipefail
 
 selection=${1:?Pass default, no-default, or component}
 dependency='default-features = false'
-api='pub use gpui_es_fluent::{CurrentLanguage, I18n};'
+api='pub use gpui_es_fluent::{CurrentLanguage, I18n};
+
+pub fn check_app(app: &mut gpui::App) {
+    let _ = gpui_es_fluent::init(app);
+    let _ = gpui_es_fluent::change_locale(app, "fr".parse().unwrap());
+}'
 case "$selection" in
   default) dependency='default-features = true' ;;
   no-default) ;;
   component)
     dependency+=', features = ["component"]'
-    api+=' pub use gpui_es_fluent::{ComponentLocaleError, component_language};'
+    api+='
+pub fn check_component_app(app: &mut gpui::App) {
+    let _ = gpui_es_fluent::init_from_component_locale(app);
+    let _ = gpui_es_fluent::set_component_locale(app, "fr");
+    let _ = gpui_es_fluent::component_language();
+}'
     ;;
   *) printf 'Unknown feature selection: %s\n' "$selection" >&2; exit 2 ;;
 esac
@@ -28,6 +38,7 @@ publish = false
 [workspace]
 
 [dependencies]
+gpui = { package = "gpui-pre", version = "=0.3.14", default-features = false }
 gpui-es-fluent = { path = "$repo_dir", $dependency }
 EOF
 printf '%s\n' "$api" > "$consumer/src/lib.rs"
@@ -37,4 +48,4 @@ printf '%s\n' "$api" > "$consumer/src/lib.rs"
 cp Cargo.lock "$consumer/Cargo.lock"
 cargo metadata --manifest-path "$consumer/Cargo.toml" --format-version 1 > /dev/null
 cargo check --manifest-path "$consumer/Cargo.toml" --lib --locked \
-  --target-dir "$repo_dir/target/feature-consumers"
+  --target-dir "${CARGO_TARGET_DIR:-$repo_dir/target/feature-consumers}"

@@ -1,12 +1,12 @@
 # GPUI Kit component integration
 
 Enable the `component` feature to keep GPUI Kit component locale state and the
-embedded `I18n` global aligned:
+embedded `I18n` global aligned. For this source checkout:
 
 ```toml
 [dependencies]
-gpui-kit = "0.9.0"
-gpui-es-fluent = { version = "0.4", features = ["component"] }
+gpui-kit = "=0.11.0"
+gpui-es-fluent = { path = "../gpui-es-fluent", features = ["component"] }
 ```
 
 Use the published `gpui-kit` facade so the application and `gpui-es-fluent`
