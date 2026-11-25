@@ -2,7 +2,7 @@
 name = "gpui-es-fluent"
 description = "GPUI global-state integration helpers for es-fluent"
 version.workspace = true
-rust-version = "1.99"
+rust-version = "1.100.0"
 edition = "2024"
 license = "MIT OR Apache-2.0"
 publish = true
@@ -18,24 +18,24 @@ version = "0.4.0"
 
 [workspace.dependencies]
 dioxus = { default-features = false, version = "0.7.10" }
-stayhydated-dioxus = { git = "https://github.com/stayhydated/shared", rev = "1569baacf4fb2a94bbf7d9f02615332407e104df" }
-stayhydated-site = { git = "https://github.com/stayhydated/shared", rev = "1569baacf4fb2a94bbf7d9f02615332407e104df" }
-stayhydated-xtask = { git = "https://github.com/stayhydated/shared", rev = "1569baacf4fb2a94bbf7d9f02615332407e104df" }
+stayhydated-dioxus = { git = "https://github.com/stayhydated/shared", rev = "c6c6f2298fab7681ee4200343d881fdbd614259a" }
+stayhydated-site = { git = "https://github.com/stayhydated/shared", rev = "c6c6f2298fab7681ee4200343d881fdbd614259a" }
+stayhydated-xtask = { git = "https://github.com/stayhydated/shared", rev = "c6c6f2298fab7681ee4200343d881fdbd614259a" }
 
 [features]
 component = [ "gpui-kit/component", "dep:thiserror" ]
 default = [  ]
 
 [dependencies]
-es-fluent = "0.21.2"
-es-fluent-manager-embedded = "0.21.2"
-gpui-kit = { default-features = false, version = "0.9.0" }
+es-fluent = "=0.21.2"
+es-fluent-manager-embedded = "=0.21.2"
+gpui-kit = { default-features = false, features = [ "x11" ], version = "=0.11.0" }
 strum = "0.28.0"
 thiserror = { optional = true, version = "2.0.21" }
 unic-langid = { features = [ "serde" ], version = "0.9.6" }
 
 [dev-dependencies]
-gpui-kit = { default-features = false, features = [ "test-support" ], version = "0.9.0" }
+gpui-kit = { default-features = false, features = [ "test-support" ], version = "=0.11.0" }
 
 [profile.dev]
 codegen-units = 16

@@ -5,15 +5,15 @@ global with an active language, and renders the message from a GPUI context.
 
 ## Prerequisites
 
-Use Rust 1.99 or newer, an existing GPUI application, and the `cargo es-fluent`
-command. Add these dependencies to the application:
+Use Rust 1.100 or newer, an existing GPUI application, and the `cargo es-fluent`
+command. To use this source checkout, add these dependencies to the application:
 
 ```toml
 [dependencies]
 es-fluent = "0.21.2"
 es-fluent-manager-embedded = "0.21.2"
-gpui-kit = "0.9.0"
-gpui-es-fluent = "0.4"
+gpui-kit = "=0.11.0"
+gpui-es-fluent = { path = "../gpui-es-fluent" }
 unic-langid = "0.9.6"
 
 [build-dependencies]
