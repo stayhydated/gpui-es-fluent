@@ -5,9 +5,16 @@ selection=${1:?Pass default, no-default, or component}
 dependency='default-features = false'
 api='pub use gpui_es_fluent::{CurrentLanguage, I18n};
 
-pub fn check_app(app: &mut gpui::App) {
+pub fn check_app<M: es_fluent::FluentMessage, L: es_fluent::FluentLabel>(
+    app: &mut gpui::App,
+    message: &M,
+) -> (Option<String>, Option<String>) {
     let _ = gpui_es_fluent::init(app);
     let _ = gpui_es_fluent::change_locale(app, "fr".parse::<unic_langid::LanguageIdentifier>().unwrap());
+    (
+        gpui_es_fluent::try_localize_message(&*app, message),
+        gpui_es_fluent::try_localize_label::<L>(&*app),
+    )
 }'
 case "$selection" in
   default) dependency='default-features = true' ;;
@@ -38,6 +45,7 @@ publish = false
 [workspace]
 
 [dependencies]
+es-fluent = "=0.22.0"
 gpui = { package = "gpui-pre", version = "=0.3.14", default-features = false }
 gpui-es-fluent = { path = "$repo_dir", $dependency }
 unic-langid = "0.9.6"

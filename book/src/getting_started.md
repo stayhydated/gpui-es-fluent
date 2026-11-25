@@ -6,18 +6,18 @@ global with an active language, and renders the message from a GPUI context.
 ## Prerequisites
 
 Use Rust 1.100 or newer, an existing GPUI application, and the `cargo es-fluent`
-command. To use this source checkout, add these dependencies to the application:
+command. Add these dependencies to the application:
 
 ```toml
 [dependencies]
-es-fluent = "0.21.2"
-es-fluent-manager-embedded = "0.21.2"
+es-fluent = "0.22.0"
+es-fluent-manager-embedded = "0.22.0"
 gpui-kit = "=0.11.0"
-gpui-es-fluent = { path = "../gpui-es-fluent" }
+gpui-es-fluent = "0.5"
 unic-langid = "0.9.6"
 
 [build-dependencies]
-es-fluent-build = "0.21.2"
+es-fluent-build = "0.22.0"
 ```
 
 Use GPUI through `gpui-kit`; it pins and re-exports the matching published GPUI

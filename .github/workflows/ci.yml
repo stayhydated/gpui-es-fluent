@@ -17,6 +17,8 @@ env:
 jobs:
   es-fluent:
     runs-on: ubuntu-latest
+    env:
+      SCCACHE_CONF: ${{ github.workspace }}/.github/sccache.toml
     steps:
       - uses: actions/checkout@v7
         with:
@@ -24,12 +26,12 @@ jobs:
       - name: Install Linux dependencies
         uses: ./.github/actions/install-linux-deps
       - name: Check every demo locale
-        uses: stayhydated/es-fluent/crates/es-fluent-cli@es-fluent-cli-v0.21.2
+        uses: stayhydated/es-fluent/crates/es-fluent-cli@ffb90f5e25c54747d8fdbd7bb48cf5cfcb95509b # es-fluent-cli-v0.22.0
         with:
           path: .
           all_locales: true
           toolchain: "1.100.0"
-          version: "0.21.2"
+          version: "=0.22.0"
 
   test:
     name: test (${{ matrix.os }})
