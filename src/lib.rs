@@ -358,7 +358,9 @@ mod tests {
         ModuleData, ModuleDomain,
     };
     use std::assert_matches;
-    use std::sync::{Mutex, Once};
+    #[cfg(feature = "component")]
+    use std::sync::Mutex;
+    use std::sync::Once;
     use unic_langid::langid;
 
     const TEST_DOMAIN: &str = "gpui-es-fluent-test";
@@ -387,30 +389,25 @@ mod tests {
     }
 
     impl I18nModule for TestModule {
-        fn create_localizer(&self) -> Box<dyn Localizer> {
-            Box::new(TestLocalizer {
-                selected: Mutex::new(langid!("en-US")),
-            })
-        }
-    }
-
-    struct TestLocalizer {
-        selected: Mutex<LanguageIdentifier>,
-    }
-
-    impl Localizer for TestLocalizer {
-        fn select_language(&self, lang: &LanguageIdentifier) -> Result<(), LocalizationError> {
-            if TEST_SUPPORTED_LANGUAGES
-                .iter()
-                .any(|candidate| candidate == lang)
-            {
-                *self.selected.lock().unwrap() = lang.clone();
-                Ok(())
+        fn create_localizer(
+            &self,
+            lang: &LanguageIdentifier,
+        ) -> Result<Box<dyn Localizer>, LocalizationError> {
+            if TEST_SUPPORTED_LANGUAGES.contains(lang) {
+                Ok(Box::new(TestLocalizer {
+                    selected: lang.clone(),
+                }))
             } else {
                 Err(LocalizationError::LanguageNotSupported(lang.clone()))
             }
         }
+    }
 
+    struct TestLocalizer {
+        selected: LanguageIdentifier,
+    }
+
+    impl Localizer for TestLocalizer {
         fn localize<'a>(
             &self,
             key: StaticFluentMessageKey,
@@ -419,7 +416,7 @@ mod tests {
             if key.owner() != TEST_DOMAIN || key.domain() != TEST_DOMAIN {
                 return None;
             }
-            let selected = self.selected.lock().unwrap().to_string();
+            let selected = self.selected.to_string();
             let value = match (selected.as_str(), key.id().as_str()) {
                 ("en-US", "test_message") => "Hello from test",
                 ("en-US", "test_label") => "Test label",

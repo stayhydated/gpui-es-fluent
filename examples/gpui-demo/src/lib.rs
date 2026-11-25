@@ -64,4 +64,27 @@ mod tests {
             }
         }
     }
+
+    #[test]
+    fn typed_demo_messages_use_parent_locale_and_preserve_it_after_rejection() {
+        i18n::link();
+        let i18n = I18n::new_with_language("fr-FR-fonipa".parse::<LanguageIdentifier>().unwrap())
+            .expect("the French regional catalog should serve a variant");
+        let french_heading = "Une vue GPUI, deux langues";
+        assert_eq!(
+            i18n.try_localize_message(&DemoMessages::Heading).as_deref(),
+            Some(french_heading)
+        );
+
+        let unsupported = "de".parse::<LanguageIdentifier>().unwrap();
+        assert!(matches!(
+            i18n.select_language(unsupported.clone()),
+            Err(gpui_es_fluent::LocalizationError::LanguageNotSupported(rejected))
+                if rejected == unsupported
+        ));
+        assert_eq!(
+            i18n.try_localize_message(&DemoMessages::Heading).as_deref(),
+            Some(french_heading)
+        );
+    }
 }
